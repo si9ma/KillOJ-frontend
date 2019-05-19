@@ -1,22 +1,45 @@
-import _ from 'lodash'
+import axios from 'axios'
 
-export function authHeader () {
+export function AuthHeader () {
   // return authorization header with jwt token
   let jwt = JSON.parse(localStorage.getItem('jwt'))
 
-  console.log(jwt)
   if (jwt && jwt.token) {
-    return { 'Authorization': 'Bearer ' + jwt.token }
+    return { Authorization: 'Bearer ' + jwt.token }
   } else {
     return {}
   }
 }
 
-export function checkLogin (t) {
-  // get user info from store
-  let user = t.$store.state.userInfo
+export function IsTokenEmpty () {
+  let jwt = JSON.parse(localStorage.getItem('jwt'))
 
-  if (_.isEmpty(user)) {
+  if (jwt && jwt.token) {
+    return false
+  }
+
+  return true
+}
+
+export function RefreshToken (t) {
+  if (IsTokenEmpty()) {
     t.$router.push('/login')
   }
+
+  axios({
+    url: process.env.API_URL + '/auth/refresh_token',
+    method: 'get',
+    headers: AuthHeader()
+  })
+    .then(response => {
+      // save token
+      console.log('refresh token success')
+      localStorage.setItem('jwt', JSON.stringify(response.data))
+      return true // refresh token success
+    })
+    .catch(error => {
+      // handle json response
+      console.log('refresh token fail', error.response)
+      t.$router.push('/') // should login
+    })
 }

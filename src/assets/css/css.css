@@ -1,0 +1,17 @@
+.logo-xs {
+  width: 75px;
+  height: auto;
+}
+
+.logo-sm {
+  width: 100px;
+  height: auto;
+}
+
+html {
+  overflow-y: auto;
+}
+
+.full-width {
+  width: 100%,
+}

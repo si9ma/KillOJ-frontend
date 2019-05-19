@@ -1,19 +1,26 @@
 import axios from 'axios'
-import { authHeader } from './auth'
+import _ from 'lodash'
+import { AuthHeader } from './auth'
 
-export function getUserInfo () {
+export function GetUserInfo (t) {
+  // if user info exist, return directly
+  let user = t.$store.state.userInfo
+
+  if (!_.isEmpty(user)) {
+    return user
+  }
+
   // get profile
   axios({
     method: 'get',
     url: process.env.API_URL + '/profile',
-    headers: authHeader()
+    headers: AuthHeader()
   })
     .then(response => {
-      this.$store.commit('updateUserInfo', response.data)
+      t.$store.commit('updateUserInfo', response.data)
       return response.data
     })
     .catch(function (error) {
-      // handle error
-      console.log('get user profile fail', error)
+      console.log('get user profile fail', error.response, error)
     })
 }
