@@ -27,7 +27,7 @@ export function RefreshToken (t) {
   }
 
   axios({
-    url: process.env.API_URL + '/auth/refresh_token',
+    url: t.$gbl.apiURL + '/auth/refresh_token',
     method: 'get',
     headers: AuthHeader()
   })

@@ -4,7 +4,8 @@
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link"
-             href="https://github.com/si9ma">
+             href="https://github.com/si9ma"
+             target="_blank">
             <font-awesome-icon :icon="['fab','github']"
                                size="lg"
                                :color="$theme.isDark ? 'white' : 'black'" />

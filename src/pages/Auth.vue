@@ -69,14 +69,6 @@
             </div>
           </div>
 
-          <!-- alert -->
-          <v-alert :value="showAlert"
-                   :color="alertType"
-                   :icon="alertIcons[alertType]"
-                   transition="scale-transition"
-                   dismissible>
-            {{alertMessage}}
-          </v-alert>
           <el-form-item size="large">
             <div class="col-md-11 pl-0 pr-0 ml-auto mr-auto">
               <el-button type="primary"
@@ -199,15 +191,6 @@ export default {
         email: false,
         name: false
       },
-      alertMessage: '',
-      showAlert: false,
-      alertType: 'success',
-      alertIcons: {
-        success: 'check_circle',
-        info: 'info',
-        warning: 'priority_high',
-        error: 'warning'
-      },
       thirdParts: [
         { icon: ['fab', 'github'], link: this.getAuthLink('github') }
       ],
@@ -226,8 +209,8 @@ export default {
         return
     }
 
-    // chek if user already login
-    var user = GetUserInfo(this)
+    // chek if user already loginlert
+    var user = GetUserInfo()
     if (user) {
       this.$router.push('/') // go home
     }
@@ -245,11 +228,11 @@ export default {
       }
     },
     getAuthLink (provider) {
-      return _.join([process.env.API_URL, 'auth3rd', provider], '/')
+      return _.join([this.$gbl.apiURL, 'auth3rd', provider], '/')
     },
     login () {
       axios({
-        url: process.env.API_URL + '/login',
+        url: this.$gbl.apiURL + '/login',
         method: 'post',
         data: {
           name: this.authForm.nameOrEmail,
@@ -262,7 +245,8 @@ export default {
           // save token
           console.log('login successful!')
           localStorage.setItem('jwt', JSON.stringify(response.data))
-          GetUserInfo(this)
+          GetUserInfo()
+          this.$gbl.alert('success', '登录成功')
           this.$router.push('/')
         })
         .catch((error) => {
@@ -270,12 +254,12 @@ export default {
           var json = ExtractJson(error.response)
           if (json) {
             console.log(json)
-            this.toggleAlert('error', json.error.message)
+            this.$gbl.alert('danger', json.error.message)
             return
           } else {
             console.log(error.response)
           }
-          this.toggleAlert('error', '出现错误')
+          this.$gbl.alert('danger', '登录出现错误')
         })
     },
     authCallback () {
@@ -283,16 +267,17 @@ export default {
       var baseURL = window.location.origin
       var fullURL = window.location.href
       axios({
-        url: _.replace(fullURL, baseURL, process.env.API_URL),
+        url: _.replace(fullURL, baseURL, this.$gbl.apiURL),
         method: 'get'
       })
         .then((response) => {
           // save token
           console.log('login successful!')
           localStorage.setItem('jwt', JSON.stringify(response.data))
-          GetUserInfo(this)
-          this.$router.push('/')
+          GetUserInfo()
           this.authing = false
+          this.$gbl.alert('success', '认证成功')
+          this.$router.push('/')
         })
         .catch((error) => {
           // handle json response
@@ -304,22 +289,22 @@ export default {
                 this.authForm.github_id = json.error.extra.userID
                 this.authForm.github_name = json.error.extra.name
                 this.binding = true
-                this.toggleAlert('warning', '你还未注册，请注册一个用户并绑定到该github账号')
+                this.$gbl.alert('warning', '你还未注册，请注册一个用户并绑定到该github账号')
                 return
               default:
                 console.log(json)
-                this.toggleAlert('error', json.error.message)
+                this.$gbl.alert('danger', json.error.message)
                 return
             }
           } else {
             console.log(error.response)
           }
-          this.toggleAlert('error', '认证出现错误')
+          this.$gbl.alert('danger', '认证出现错误')
         })
     },
     signup () {
       axios({
-        url: process.env.API_URL + '/signup',
+        url: this.$gbl.apiURL + '/signup',
         method: 'post',
         data: {
           name: this.authForm.name,
@@ -333,7 +318,7 @@ export default {
           console.log('signup successful!')
           this.isLogin = true // to login page
           this.authForm.nameOrEmail = this.authForm.email // use email to login
-          this.toggleAlert('success', '注册成功，请登录')
+          this.$gbl.alert('success', '注册成功，请登录')
         })
         .catch((error) => {
           // handle json response
@@ -345,24 +330,20 @@ export default {
                   this.alreadyExistField[field] = true
                 }
                 this.$refs['authForm'].validate() // trigger validate
-                this.toggleAlert('warning', 'something wrong')
+                this.$gbl.alert('warning', 'something wrong')
                 return
               default:
                 console.log(json)
+                this.$gbl.alert('danger', json.error.message)
+                return
             }
           } else {
             console.log(error.response)
           }
-          this.toggleAlert('error', '出现错误')
+          this.$gbl.alert('danger', '注册出现错误')
         })
     },
-    toggleAlert (type, msg) {
-      this.showAlert = true
-      this.alertType = type
-      this.alertMessage = msg
-    },
     submitForm (formName) {
-      this.showAlert = false // clear alert
       this.$refs[formName].validate((valid) => {
         this.doing = true // loading
         if (valid) {

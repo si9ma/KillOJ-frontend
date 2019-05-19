@@ -1,10 +1,12 @@
 import axios from 'axios'
 import _ from 'lodash'
 import { AuthHeader } from './auth'
+import store from '../store'
+import Vue from 'vue'
 
-export function GetUserInfo (t) {
+export function GetUserInfo () {
   // if user info exist, return directly
-  let user = t.$store.state.userInfo
+  let user = store.state.userInfo
 
   if (!_.isEmpty(user)) {
     return user
@@ -13,11 +15,11 @@ export function GetUserInfo (t) {
   // get profile
   axios({
     method: 'get',
-    url: process.env.API_URL + '/profile',
+    url: Vue.prototype.$gbl.apiURL + '/profile',
     headers: AuthHeader()
   })
     .then(response => {
-      t.$store.commit('updateUserInfo', response.data)
+      store.commit('updateUserInfo', response.data)
       return response.data
     })
     .catch(function (error) {

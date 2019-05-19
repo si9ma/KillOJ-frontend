@@ -9,7 +9,7 @@ export default new Vuex.Store({
     userInfo: {}
   },
   // Persist and rehydrate your Vuex state between page reloads.
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
   mutations: {
     // update user info
     updateUserInfo (state, newUserInfo) {

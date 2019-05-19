@@ -8,41 +8,52 @@
       <div class="block block-three"></div>
       <div class="block block-four"></div>
       <a href="#">
-        <img class="avatar" src="img/anime6.png" alt="...">
-        <h5 class="title">{{user.fullName}}</h5>
+        <img class="avatar"
+             :src="user.avatar ? user.avatar : 'img/anime3.png'"
+             alt="...">
+        <h5 class="title">{{user.name}}</h5>
       </a>
-      <p class="description">
-        {{user.title}}
-      </p>
     </div>
     <p></p>
-    <p class="card-description">
-      {{user.description}}
+    <p class="card-description text-center">
+      {{user.signature || '这个人有点懒，什么都没留下'}}
     </p>
-    <div slot="footer" class="button-container">
-      <base-button icon round class="btn-facebook">
-        <i class="fab fa-facebook"></i>
-      </base-button>
-      <base-button icon round class="btn-twitter">
-        <i class="fab fa-twitter"></i>
-      </base-button>
-      <base-button icon round class="btn-google">
-        <i class="fab fa-google-plus"></i>
-      </base-button>
+    <div slot="footer"
+         class="button-container">
+      <a v-for="(social,key) in socials"
+         :key="key"
+         :href="social.link"
+         target="_blank"
+         v-if="social.show">
+        <base-button icon
+                     round>
+          <font-awesome-icon :icon="social.icon"
+                             size="lg" />
+        </base-button>
+      </a>
     </div>
   </card>
 </template>
 <script>
-  export default {
-    props: {
-      user: {
-        type: Object,
-        default: () => {
-          return {};
-        }
+export default {
+  props: {
+    user: {
+      type: Object,
+      default: () => {
+        return {};
       }
     }
+  },
+  computed: {
+    socials () {
+      return [
+        { provider: 'github', icon: ['fab', 'github'], link: _.join(['https://github.com', this.user.github_name], '/'), show: this.user.github_name },
+        { provider: 'zhihu', icon: ['fab', 'zhihu'], link: _.join(['https://www.zhihu.com/people', this.user.zhihu_name], '/'), show: this.user.zhihu_name },
+        { provider: 'weibo', icon: ['fab', 'weibo'], link: _.join(['https://weibo.com', this.user.weibo_name], '/'), show: this.user.weibo_name },
+      ]
+    }
   }
+}
 </script>
 <style>
 </style>

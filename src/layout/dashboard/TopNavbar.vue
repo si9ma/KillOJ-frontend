@@ -26,7 +26,8 @@
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <a href="/">
+        <a href="#"
+           @click="$router.push('/')">
           <p class="mt-auto mb-auto"
              :color="$theme.isDark ? 'white' : 'dark'">
             {{routeName}}</p>
@@ -120,7 +121,7 @@
                  data-toggle="dropdown"
                  aria-expanded="true">
                 <div class="photo">
-                  <img src="img/anime3.png">
+                  <img :src="user && user.avatar ? user.avatar : 'img/anime3.png'">
                 </div>
                 <b class="caret d-none d-lg-block d-xl-block"></b>
                 <p class="d-lg-none">
@@ -128,8 +129,9 @@
                 </p>
               </a>
               <li class="nav-link">
-                <a href="/profile"
-                   class="nav-item dropdown-item">Profile</a>
+                <a href="#"
+                   @click="user ? $router.push('/profile') : $router.push('/login')"
+                   class="nav-item dropdown-item">{{user ? user.name : '登录'}}</a>
               </li>
               <li class="nav-link">
                 <a href="#"
@@ -153,6 +155,7 @@
               <div class="dropdown-divider"></div>
               <li class="nav-link">
                 <a href="#"
+                   @click="logout()"
                    class="nav-item dropdown-item">Log out</a>
               </li>
             </base-dropdown>
@@ -165,6 +168,9 @@
 <script>
 import { CollapseTransition } from 'vue2-transitions';
 import Modal from '@/components/Modal';
+import axios from 'axios'
+import _ from 'lodash'
+import { AuthHeader } from '@/service/auth'
 
 export default {
   components: {
@@ -178,6 +184,14 @@ export default {
     },
     isRTL () {
       return this.$rtl.isRTL;
+    },
+    user () {
+      var user = this.$store.state.userInfo
+      if (!_.isEmpty(user)) {
+        return user
+      }
+
+      return null
     }
   },
   data () {
@@ -212,6 +226,27 @@ export default {
     },
     toggleMenu () {
       this.showMenu = !this.showMenu;
+    },
+    logout () {
+      // logout api
+      console.log(AuthHeader())
+      axios({
+        url: this.$gbl.apiURL + '/logout',
+        method: 'get',
+        headers: AuthHeader()
+      })
+        .then((response) => {
+          // save token
+          console.log('logout successful!')
+        })
+        .catch((error) => {
+          console.log('logout successful!')
+          console.log(error)
+        })
+      this.$store.commit('updateUserInfo', {})
+      localStorage.setItem('jwt', '{}') // clear jwt
+      this.$gbl.alert('success', '退出登录成功')
+      this.$router.push('/login')
     }
   }
 };
