@@ -6,7 +6,7 @@ import { GetUserInfo } from '@/service/user'
 
 // configure router
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   routes, // short for routes: routes
   linkExactActiveClass: 'active',
   scrollBehavior: to => {
@@ -19,8 +19,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  var isAuth3rd = _.includes(to.path, '/auth3rd/')
   var jwt = localStorage.getItem('jwt')
-  if (_.isEmpty(store.state.userInfo && _.isEmpty(jwt))) {
+
+  // skip auth3rd
+  if (_.isEmpty(store.state.userInfo) && !_.isEmpty(jwt) && !isAuth3rd) {
     // if user info is empty and jwt exist, get user info
     GetUserInfo()
   }
