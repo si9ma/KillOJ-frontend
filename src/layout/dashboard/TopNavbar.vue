@@ -4,12 +4,9 @@
     <div class="container-fluid">
       <div class="navbar-wrapper">
         <div class="navbar-minimize d-inline"
-             :class="{toggled: !$sidebar.showSidebar}">
-          <button rel="tooltip"
-                  @click="toggleSidebar"
-                  data-original-title="Sidebar toggle"
-                  data-placement="right"
-                  class="minimize-sidebar btn btn-link btn-just-icon el-tooltip"
+             :class="{toggled: $sidebar.showSidebar}">
+          <button @click="toggleSidebar"
+                  class="minimize-sidebar btn btn-link"
                   tabindex="0">
             <i class="tim-icons icon-align-center visible-on-sidebar-regular"></i>
             <i class="tim-icons icon-bullet-list-67 visible-on-sidebar-mini"></i>

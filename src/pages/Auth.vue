@@ -116,7 +116,6 @@ import axios from 'axios'
 import _ from 'lodash'
 import { GetUserInfo } from '../service/user'
 import { Contains, ExtractJson } from '../service/util'
-import { BaseAlert } from '@/components'
 
 export default {
   props: ['HandleType'],

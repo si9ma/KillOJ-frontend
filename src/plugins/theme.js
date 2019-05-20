@@ -20,6 +20,18 @@ export default {
         },
         changeSidebar(bg) {
           this.sidebarBG = bg
+        },
+        tableTheme({ row, column, rowIndex, columnIndex }) {
+          if (this.isDark) {
+            return {
+              backgroundColor: '#27293d',
+              width: '100%',
+              color: 'rgba(255, 255, 255, 0.8)',
+              'border-color': 'rgba(255,255,255,0.05)'
+            }
+          } else {
+            return { backgroundColor: 'white', width: '100%', color: '#1d253b' }
+          }
         }
       }
     })

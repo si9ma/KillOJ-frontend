@@ -1,5 +1,9 @@
 <template>
   <card type="user">
+    <h5 slot="header"
+        v-if="title"
+        class="title">{{title}}</h5>
+
     <p class="card-text">
     </p>
     <div class="author">
@@ -41,6 +45,12 @@ export default {
       type: Object,
       default: () => {
         return {};
+      }
+    },
+    title: {
+      type: String,
+      default: () => {
+        return null;
       }
     }
   },

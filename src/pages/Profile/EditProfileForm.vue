@@ -104,10 +104,11 @@
       </div>
     </el-form>
     <div class="row col-md-12 ml-auto mr-auto">
-      <base-button slot="footer"
-                   type="primary"
-                   @click="submitForm('profileForm')"
-                   fill>保存</base-button>
+      <el-button slot="footer"
+                 type="primary"
+                 size="small"
+                 @click="submitForm('profileForm')"
+                 fill>保存</el-button>
     </div>
   </card>
 </template>

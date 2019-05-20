@@ -15,8 +15,23 @@ const Typography = () =>
   import(/* webpackChunkName: "common" */ '@/pages/Typography.vue')
 const TableList = () =>
   import(/* webpackChunkName: "common" */ '@/pages/TableList.vue')
-const Auth = () =>
-  import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
+const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
+const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
+
+import _ from 'lodash'
+import Vue from 'vue'
+import { GetUserInfo } from '@/service/user'
+
+function needLogin(to, from, next) {
+  var user = GetUserInfo()
+  // need login
+  if (_.isEmpty(user)) {
+    Vue.prototype.$gbl.alert('warning', '你还未登录，请登录')
+    return next('/login')
+  }
+
+  next()
+}
 
 const routes = [
   {
@@ -32,7 +47,8 @@ const routes = [
       {
         path: 'profile',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        beforeEnter: needLogin
       },
       {
         path: 'notifications',
@@ -61,21 +77,27 @@ const routes = [
       },
       {
         path: '/login',
-        name: 'Login',
+        name: 'login',
         component: Auth,
         props: { HandleType: 'login' }
       },
       {
         path: '/signup',
-        name: 'Signup',
+        name: 'signup',
         component: Auth,
         props: { HandleType: 'signup' }
       },
       {
         path: '/auth3rd/:provider/callback',
-        name: 'Auth',
+        name: 'auth',
         component: Auth,
         props: { HandleType: 'auth' }
+      },
+      {
+        path: '/groups',
+        name: 'groups',
+        component: Group,
+        beforeEnter: needLogin,
       }
     ]
   },

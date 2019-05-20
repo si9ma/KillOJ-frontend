@@ -373,6 +373,12 @@
 
 }
 
+@media (max-width: 991.98px) {
+  .minimize-sidebar {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 992px) {
   .navbar-collapse {
     background: none !important;
