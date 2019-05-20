@@ -157,7 +157,7 @@
       UserCard
     },
     data () {
-      var validateName = (rule, value, callback) => {
+      let validateName = (rule, value, callback) => {
         // name shouldn't contains special character
         if (Contains(value, '!@#?')) {
           callback(new Error('分组名不能包含!@#?字符'))
@@ -244,7 +244,7 @@
           this.doing = false
 
           // handle json response
-          var json = ExtractJson(error.response)
+          let json = ExtractJson(error.response)
           if (json) {
             console.log(json)
             this.$gbl.alert('danger', json.error.message)
@@ -303,18 +303,18 @@
         })
           .then((response) => {
             console.log('create group successful!')
-            var newGroup = response.data
+            let newGroup = response.data
             newGroup.owner = this.$store.state.userInfo // important, we need as info of myself
             this.groups.push(newGroup)
             this.$gbl.alert('success', '添加分组成功')
           })
           .catch((error) => {
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               switch (json.error.code) {
                 case 40003: // something already exist
-                  for (var field in json.error.extra) {
+                  for (let field in json.error.extra) {
                     this.alreadyExistField[field] = true
                   }
                   this.$refs['groupForm'].validate() // trigger validate
@@ -342,18 +342,18 @@
         })
           .then((response) => {
             console.log('update group successful!')
-            var foundIndex = this.groups.findIndex(x => x.id == this.activeGroup.id);
+            let foundIndex = this.groups.findIndex(x => x.id == this.activeGroup.id);
             this.groups[foundIndex] = this.activeGroup
             this.$gbl.alert('success', '修改分组成功')
           })
           .catch((error) => {
             console.log(error.response)
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               switch (json.error.code) {
                 case 40003: // something already exist
-                  for (var field in json.error.extra) {
+                  for (let field in json.error.extra) {
                     this.alreadyExistField[field] = true
                   }
                   this.$refs['groupForm'].validate() // trigger validate
@@ -387,7 +387,7 @@
           })
           .catch((error) => {
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               console.log(json)
               this.$gbl.alert('danger', json.error.message)
@@ -415,7 +415,7 @@
           .catch((error) => {
             this.doing = false
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               console.log(json)
               this.inviteURL = ''
@@ -444,8 +444,8 @@
         this.filterGroups()
       },
       resortGroups (val) {
-        var byID = groupCompareByID(val.order)
-        var byName = groupCompareByName(val.order)
+        let byID = groupCompareByID(val.order)
+        let byName = groupCompareByName(val.order)
         this.sortedGroups = [...this.groups] // deep copy
         this.filter = val // save sort config
 
@@ -461,8 +461,8 @@
         this.filterGroups()
       },
       filterGroups () {
-        var from = (this.currentPage - 1) * this.pageSize
-        var to = this.currentPage * this.pageSize
+        let from = (this.currentPage - 1) * this.pageSize
+        let to = this.currentPage * this.pageSize
         this.filteredGroups = this.sortedGroups.slice(from, to)
       }
     }

@@ -119,7 +119,7 @@
   export default {
     props: ['HandleType'],
     data () {
-      var validatePass = (rule, value, callback) => {
+      let validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('再次输入密码'))
         } else if (value !== this.authForm.password) {
@@ -129,7 +129,7 @@
         }
       }
 
-      var validateName = (rule, value, callback) => {
+      let validateName = (rule, value, callback) => {
         // name shouldn't contains special character
         if (Contains(value, '!@#?')) {
           callback(new Error('用户名不能包含!@#?字符'))
@@ -140,7 +140,7 @@
         }
       }
 
-      var validateEmail = (rule, value, callback) => {
+      let validateEmail = (rule, value, callback) => {
         // name shouldn't contains special character
         if (this.alreadyExistField.email) {
           callback(new Error('邮箱已经被注册'))
@@ -208,7 +208,7 @@
       }
 
       // chek if user already loginlert
-      var user = GetUserInfo()
+      let user = GetUserInfo()
       if (user) {
         this.$router.push('/') // go home
       }
@@ -249,7 +249,7 @@
           })
           .catch((error) => {
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               console.log(json)
               this.$gbl.alert('danger', json.error.message)
@@ -262,8 +262,8 @@
       },
       authCallback () {
         // proxy to backend
-        var baseURL = window.location.origin
-        var fullURL = window.location.href
+        let baseURL = window.location.origin
+        let fullURL = window.location.href
         this.$axios({
           url: _.replace(fullURL, baseURL, this.$gbl.apiURL),
           method: 'get'
@@ -279,7 +279,7 @@
           })
           .catch((error) => {
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             this.authing = false
             if (json) {
               switch (json.error.code) {
@@ -320,11 +320,11 @@
           })
           .catch((error) => {
             // handle json response
-            var json = ExtractJson(error.response)
+            let json = ExtractJson(error.response)
             if (json) {
               switch (json.error.code) {
                 case 40003: // something already exist
-                  for (var field in json.error.extra) {
+                  for (let field in json.error.extra) {
                     this.alreadyExistField[field] = true
                   }
                   this.$refs['authForm'].validate() // trigger validate
