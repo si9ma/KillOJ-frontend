@@ -258,8 +258,8 @@ textarea.form-control{
         margin-bottom: 15px;
 
         .form-check:first-child{
-           margin-top: 8px;
-       }
+          margin-top: 8px;
+      }
     }
 
     .label-on-right{
@@ -280,57 +280,57 @@ textarea.form-control{
       .btn{
         margin: 0;
       }
-       &.input-group{
-           border-radius: 25px;
-           z-index: 4;
-           margin-bottom: 0;
-           height: 43px;
-           padding-right: 5px;
-           .input-group-addon{
+      &.input-group{
+          border-radius: 25px;
+          z-index: 4;
+          margin-bottom: 0;
+          height: 43px;
+          padding-right: 5px;
+          .input-group-addon{
               padding: 10px;
-               background: transparent;
-               border: none;
-               color: rgba(255, 255, 255, 0.7);
+              background: transparent;
+              border: none;
+              color: rgba(255, 255, 255, 0.7);
 
-           }
+          }
 
-           i{
-               font-size: 20px;
-               color: $white;
-               margin-top: 0 !important;
-           }
-           input{
-               background: transparent;
-               border:none !important;
-               border-radius: 0;
-               padding: 12px !important;
-               font-size: 12px;
-               opacity: 0.5;
-               &:focus{
-                   background: transparent;
-               }
-           }
-           .form-control{
-               opacity: 1;
-               color: $white;
-               &::placeholder{
-                 color: white;
-               }
-           }
-       }
-   }
+          i{
+              font-size: 20px;
+              color: $white;
+              margin-top: 0 !important;
+          }
+          input{
+              background: transparent;
+              border:none !important;
+              border-radius: 0;
+              padding: 12px !important;
+              font-size: 12px;
+              opacity: 0.5;
+              &:focus{
+                  background: transparent;
+              }
+          }
+          .form-control{
+              opacity: 1;
+              color: $white;
+              &::placeholder{
+                color: white;
+              }
+          }
+      }
+  }
 
-   .modal-search .modal-dialog{
-     max-width: 1000px;
-     margin: 20px auto;
-     .form-control{
-       border: none;
-       color: $black;
-       &::placeholder{
-         color: $black;
-       }
-     }
-   }
+  .modal-search .modal-dialog{
+    max-width: 1000px;
+    margin: 20px auto;
+    .form-control{
+      border: none;
+      color: $black;
+      &::placeholder{
+        color: $black;
+      }
+    }
+  }
 
 .input-group-prepend{
   margin-right: 0;

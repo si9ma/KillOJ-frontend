@@ -4,8 +4,8 @@
         class="title">编辑信息</h5>
 
     <el-form :model="user"
-             :rules="profileRules"
-             ref="profileForm">
+            :rules="profileRules"
+            ref="profileForm">
       <div class="row">
         <div class="col-md-6">
           <el-form-item label="用户名"
@@ -105,10 +105,10 @@
     </el-form>
     <div class="row col-md-12 ml-auto mr-auto">
       <el-button slot="footer"
-                 type="primary"
-                 size="small"
-                 @click="submitForm('profileForm')"
-                 fill>保存</el-button>
+                type="primary"
+                size="small"
+                @click="submitForm('profileForm')"
+                fill>保存</el-button>
     </div>
   </card>
 </template>

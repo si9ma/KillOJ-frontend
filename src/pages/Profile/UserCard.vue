@@ -13,8 +13,8 @@
       <div class="block block-four"></div>
       <a href="#">
         <img class="avatar"
-             :src="user.avatar ? user.avatar : 'img/anime3.png'"
-             alt="...">
+            :src="user.avatar ? user.avatar : 'img/anime3.png'"
+            alt="...">
         <h5 class="title">{{user.name}}</h5>
       </a>
     </div>
@@ -23,16 +23,16 @@
       {{user.signature || '这个人有点懒，什么都没留下'}}
     </p>
     <div slot="footer"
-         class="button-container">
+        class="button-container">
       <a v-for="(social,key) in socials"
-         :key="key"
-         :href="social.link"
-         target="_blank"
-         v-if="social.show">
+        :key="key"
+        :href="social.link"
+        target="_blank"
+        v-if="social.show">
         <base-button icon
-                     round>
+                    round>
           <font-awesome-icon :icon="social.icon"
-                             size="lg" />
+                            size="lg" />
         </base-button>
       </a>
     </div>

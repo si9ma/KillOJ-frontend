@@ -4,19 +4,19 @@
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link"
-             href="https://github.com/si9ma"
-             target="_blank">
+            href="https://github.com/si9ma"
+            target="_blank">
             <font-awesome-icon :icon="['fab','github']"
-                               size="lg"
-                               :color="$theme.isDark ? 'white' : 'black'" />
+                              size="lg"
+                              :color="$theme.isDark ? 'white' : 'black'" />
           </a>
         </li>
       </ul>
       <div class="copyright">
         © {{year}} made by
         <a href="https://si9ma.com"
-           target="_blank"
-           rel="noopener">si9ma</a>
+          target="_blank"
+          rel="noopener">si9ma</a>
       </div>
     </div>
   </footer>

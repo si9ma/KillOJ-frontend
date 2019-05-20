@@ -146,7 +146,7 @@
         li{
             > a + div .nav{
               margin-top: 5px;
-               li > a{
+              li > a{
                   margin-top: 0px;
                   padding: 8px 8px;
               }
@@ -410,14 +410,14 @@
 
         .info{
             > a{
-               display: block;
-               line-height: 18px;
+              display: block;
+              line-height: 18px;
 
                 > span{
-                   @extend .animation-transition-general;
-                   display: block;
-                   position: relative;
-                   opacity: 1;
+                  @extend .animation-transition-general;
+                  display: block;
+                  position: relative;
+                  opacity: 1;
                 }
             }
 

@@ -1,12 +1,12 @@
 <template>
   <div class="form-check"
-       :class="[{disabled: disabled}, inlineClass]">
+      :class="[{disabled: disabled}, inlineClass]">
     <label :for="cbId" class="form-check-label">
       <input :id="cbId"
-             class="form-check-input"
-             type="checkbox"
-             :disabled="disabled"
-             v-model="model"/>
+            class="form-check-input"
+            type="checkbox"
+            :disabled="disabled"
+            v-model="model"/>
       <span class="form-check-sign"></span>
       <slot>
         <span v-if="inline">&nbsp;</span>

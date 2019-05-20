@@ -18,8 +18,8 @@
     &:active,
     &.active,
     .open > &.dropdown-toggle {
-         @include box-shadow(none);
-         outline: 0 !important;
+        @include box-shadow(none);
+        outline: 0 !important;
     }
 
     .badge{
@@ -123,9 +123,9 @@
 .btn-neutral { @include btn-styles($white, $white); }
 
 .btn{
-     &:disabled,
-     &[disabled],
-     &.disabled{
+    &:disabled,
+    &[disabled],
+    &.disabled{
         @include opacity(.5);
         pointer-events: none;
     }
@@ -173,7 +173,7 @@
 }
 
 .btn-lg{
-   @include btn-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-base, $border-radius-lg);
+  @include btn-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-base, $border-radius-lg);
 }
 .btn-sm{
     @include btn-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-base, $border-radius-sm);

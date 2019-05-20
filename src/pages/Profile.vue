@@ -10,29 +10,29 @@
   </div>
 </template>
 <script>
-import EditProfileForm from './Profile/EditProfileForm';
-import UserCard from './Profile/UserCard'
-import _ from 'lodash'
-import { GetUserInfo } from '@/service/user'
+  import EditProfileForm from './Profile/EditProfileForm';
+  import UserCard from './Profile/UserCard'
+  import _ from 'lodash'
+  import { GetUserInfo } from '@/service/user'
 
-export default {
-  components: {
-    EditProfileForm,
-    UserCard
-  },
-  data () {
-    return {
-      user: {}
-    }
-  },
-  created () {
-    this.user = GetUserInfo()
-    if (_.isEmpty(this.user)) {
-      this.$gbl.alert('warning', '你还未登录，请登录')
-      this.$router.push('/login')
+  export default {
+    components: {
+      EditProfileForm,
+      UserCard
+    },
+    data () {
+      return {
+        user: {}
+      }
+    },
+    created () {
+      this.user = GetUserInfo()
+      if (_.isEmpty(this.user)) {
+        this.$gbl.alert('warning', '你还未登录，请登录')
+        this.$router.push('/login')
+      }
     }
   }
-}
 </script>
 <style>
 </style>

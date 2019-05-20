@@ -16,7 +16,7 @@
     &:active:hover,
     &.active:focus,
     &.active:hover
-     {
+    {
         background-color: $btn-states-color !important;
         background-image: linear-gradient(to bottom left, $btn-color, $btn-states-color, $btn-color) !important;
         background-image: -webkit-linear-gradient(to bottom left, $btn-color, $btn-states-color, $btn-color) !important;
@@ -284,13 +284,13 @@
 
 // Button sizes
 @mixin btn-size($padding-vertical, $padding-horizontal, $font-size, $border){
-   font-size: $font-size;
-   border-radius: $border;
-   padding: $padding-vertical $padding-horizontal;
+  font-size: $font-size;
+  border-radius: $border;
+  padding: $padding-vertical $padding-horizontal;
 
-   &.btn-simple{
-       padding: $padding-vertical - 1 $padding-horizontal - 1;
-   }
+  &.btn-simple{
+      padding: $padding-vertical - 1 $padding-horizontal - 1;
+  }
 
 }
 

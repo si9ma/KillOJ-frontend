@@ -1,12 +1,12 @@
 <template>
     <nav class="navbar"
-         :class="[
+        :class="[
             {'navbar-expand-lg': expand},
             {[`navbar-${effect}`]: effect},
             {'navbar-transparent': transparent},
             {[`bg-${type}`]: type},
             {'rounded': round}
-         ]">
+        ]">
         <div class="container">
             <slot name="container-pre"></slot>
             <slot name="brand">

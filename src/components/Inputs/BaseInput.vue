@@ -1,9 +1,9 @@
 <template>
   <div class="form-group"
-       :class="{
+      :class="{
           'input-group': hasIcon,
           'input-group-focus': focused
-       }">
+      }">
     <slot name="label">
       <label v-if="label" class="control-label">
         {{label}}

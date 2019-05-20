@@ -1,15 +1,15 @@
 <template>
   <SlideYUpTransition :duration="animationDuration">
     <div class="modal fade"
-         @click.self="closeModal"
-         :class="[{'show d-block': show}, {'d-none': !show}, {'modal-mini': type === 'mini'}]"
-         v-show="show"
-         tabindex="-1"
-         role="dialog"
-         :aria-hidden="!show">
+        @click.self="closeModal"
+        :class="[{'show d-block': show}, {'d-none': !show}, {'modal-mini': type === 'mini'}]"
+        v-show="show"
+        tabindex="-1"
+        role="dialog"
+        :aria-hidden="!show">
 
       <div class="modal-dialog"
-           :class="[{'modal-notice': type === 'notice'}, {'modal-dialog-centered': centered}, modalClasses]">
+          :class="[{'modal-notice': type === 'notice'}, {'modal-dialog-centered': centered}, modalClasses]">
         <div class="modal-content" :class="[gradient ? `bg-gradient-${gradient}` : '',modalContentClasses]">
 
           <div class="modal-header" :class="[headerClasses]" v-if="$slots.header">

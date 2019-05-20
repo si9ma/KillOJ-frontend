@@ -1,5 +1,5 @@
 [class*="shadow"] {
-	@if $enable-transitions {
+  @if $enable-transitions {
         transition: $transition-base;
     }
 }

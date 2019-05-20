@@ -1,24 +1,24 @@
 <template>
   <div class="sidebar"
-       :data="backgroundColor">
+      :data="backgroundColor">
     <!--
             Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
             Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
         -->
     <!-- -->
     <div class="sidebar-wrapper"
-         id="style-3">
+        id="style-3">
       <div class="logo">
         <a href="/"
-           aria-label="sidebar mini logo"
-           class="simple-text logo-mini">
+          aria-label="sidebar mini logo"
+          class="simple-text logo-mini">
           <div :class="{'logo-img-rtl': $rtl.isRTL}">
             <img :src="require('@/assets/image/logo-light.png')"
-                 alt="">
+                alt="">
           </div>
         </a>
         <a href="/"
-           class="simple-text logo-normal">
+          class="simple-text logo-normal">
           {{title}}
         </a>
       </div>
@@ -87,9 +87,9 @@ export default {
   },
   computed: {
     /**
-     * Styles to animate the arrow near the current active sidebar link
-     * @returns {{transform: string}}
-     */
+    * Styles to animate the arrow near the current active sidebar link
+    * @returns {{transform: string}}
+    */
     arrowMovePx () {
       return this.linkHeight * this.activeLinkIndex;
     },

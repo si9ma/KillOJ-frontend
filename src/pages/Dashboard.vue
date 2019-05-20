@@ -12,17 +12,17 @@
               </div>
               <div class="col-sm-6">
                 <div class="btn-group btn-group-toggle"
-                     :class="isRTL ? 'float-left' : 'float-right'"
-                     data-toggle="buttons">
+                    :class="isRTL ? 'float-left' : 'float-right'"
+                    data-toggle="buttons">
                   <label v-for="(option, index) in bigLineChartCategories"
-                         :key="option"
-                         class="btn btn-sm btn-primary btn-simple"
-                         :class="{active: bigLineChart.activeIndex === index}"
-                         :id="index">
+                        :key="option"
+                        class="btn btn-sm btn-primary btn-simple"
+                        :class="{active: bigLineChart.activeIndex === index}"
+                        :id="index">
                     <input type="radio"
-                           @click="initBigChart(index)"
-                           name="options" autocomplete="off"
-                           :checked="bigLineChart.activeIndex === index">
+                          @click="initBigChart(index)"
+                          name="options" autocomplete="off"
+                          :checked="bigLineChart.activeIndex === index">
                     {{option}}
                   </label>
                 </div>
@@ -68,10 +68,10 @@
           </template>
           <div class="chart-area">
             <bar-chart style="height: 100%"
-                       chart-id="blue-bar-chart"
-                       :chart-data="blueBarChart.chartData"
-                       :gradient-stops="blueBarChart.gradientStops"
-                       :extra-options="blueBarChart.extraOptions">
+                      chart-id="blue-bar-chart"
+                      :chart-data="blueBarChart.chartData"
+                      :gradient-stops="blueBarChart.gradientStops"
+                      :extra-options="blueBarChart.extraOptions">
             </bar-chart>
           </div>
         </card>
@@ -100,10 +100,10 @@
             <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
             <p class="card-category d-inline">{{$t('dashboard.today')}}</p>
             <base-dropdown menu-on-right=""
-                           tag="div"
-                           title-classes="btn btn-link btn-icon"
-                           aria-label="Settings menu"
-                           :class="{'float-left': isRTL}">
+                          tag="div"
+                          title-classes="btn btn-link btn-icon"
+                          aria-label="Settings menu"
+                          :class="{'float-left': isRTL}">
               <i slot="title" class="tim-icons icon-settings-gear-63"></i>
               <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.action')}}</a>
               <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.anotherAction')}}</a>

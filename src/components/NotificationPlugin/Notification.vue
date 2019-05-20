@@ -1,11 +1,11 @@
 <template>
   <div @click="tryClose"
-       data-notify="container"
-       class="alert open"
-       :class="[{'alert-with-icon': icon}, verticalAlign, horizontalAlign, alertType]"
-       role="alert"
-       :style="customPosition"
-       data-notify-position="top-center">
+      data-notify="container"
+      class="alert open"
+      :class="[{'alert-with-icon': icon}, verticalAlign, horizontalAlign, alertType]"
+      role="alert"
+      :style="customPosition"
+      data-notify-position="top-center">
     <button
       v-if="showClose"
       type="button"
