@@ -165,7 +165,6 @@
 <script>
 import { CollapseTransition } from 'vue2-transitions';
 import Modal from '@/components/Modal';
-import axios from 'axios'
 import _ from 'lodash'
 import { AuthHeader } from '@/service/auth'
 
@@ -226,8 +225,7 @@ export default {
     },
     logout () {
       // logout api
-      console.log(AuthHeader())
-      axios({
+      this.$axios({
         url: this.$gbl.apiURL + '/logout',
         method: 'get',
         headers: AuthHeader()

@@ -13,6 +13,7 @@ export function GetUserInfo () {
   }
 
   // get profile
+  // import , this axios instance not the global instance
   axios({
     method: 'get',
     url: Vue.prototype.$gbl.apiURL + '/profile',

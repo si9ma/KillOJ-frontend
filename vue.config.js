@@ -1,6 +1,9 @@
-const webpack = require('webpack');
+const webpack = require('webpack')
 
 module.exports = {
+  configureWebpack: {
+    devtool: 'source-map'
+  },
   lintOnSave: false,
   configureWebpack: {
     // Set up all the aliases we use in our app.
@@ -34,4 +37,4 @@ module.exports = {
     // Enable CSS source maps.
     sourceMap: process.env.NODE_ENV !== 'production'
   }
-};
+}

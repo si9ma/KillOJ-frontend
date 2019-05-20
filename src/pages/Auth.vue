@@ -112,7 +112,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import _ from 'lodash'
 import { GetUserInfo } from '../service/user'
 import { Contains, ExtractJson } from '../service/util'
@@ -230,7 +229,7 @@ export default {
       return _.join([this.$gbl.apiURL, 'auth3rd', provider], '/')
     },
     login () {
-      axios({
+      this.$axios({
         url: this.$gbl.apiURL + '/login',
         method: 'post',
         data: {
@@ -265,7 +264,7 @@ export default {
       // proxy to backend
       var baseURL = window.location.origin
       var fullURL = window.location.href
-      axios({
+      this.$axios({
         url: _.replace(fullURL, baseURL, this.$gbl.apiURL),
         method: 'get'
       })
@@ -302,7 +301,7 @@ export default {
         })
     },
     signup () {
-      axios({
+      this.$axios({
         url: this.$gbl.apiURL + '/signup',
         method: 'post',
         data: {

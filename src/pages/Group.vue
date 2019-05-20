@@ -124,7 +124,6 @@
 
 <script>
 import UserCard from './Profile/UserCard'
-import axios from 'axios'
 import { AuthHeader } from '@/service/auth'
 import { ExtractJson } from '@/service/util'
 import { Contains } from '@/service/util'
@@ -225,7 +224,7 @@ export default {
     },
     created () {
         this.doing = true
-        axios({
+        this.$axios({
             method: 'get',
             url: this.$gbl.apiURL + '/groups',
             headers: AuthHeader(),
@@ -294,7 +293,7 @@ export default {
             })
         },
         createGroup () {
-            axios({
+            this.$axios({
                 url: this.$gbl.apiURL + '/groups',
                 method: 'post',
                 headers: AuthHeader(),
@@ -333,7 +332,7 @@ export default {
                 })
         },
         updateGroup () {
-            axios({
+            this.$axios({
                 url: this.$gbl.apiURL + '/groups/group/' + this.activeGroup.id,
                 method: 'put',
                 headers: AuthHeader(),
@@ -372,7 +371,7 @@ export default {
                 })
         },
         invite2Group () {
-            axios({
+            this.$axios({
                 url: _.join([this.$gbl.apiURL, '/groups/group', this.activeGroup.id, 'invite'], '/'),
                 method: 'post',
                 headers: AuthHeader(),
@@ -402,7 +401,7 @@ export default {
         },
         getInviteInfo () {
             this.doing = true
-            axios({
+            this.$axios({
                 url: _.join([this.$gbl.apiURL, '/groups/group', this.activeGroup.id, 'invite'], '/'),
                 method: 'get',
                 headers: AuthHeader(),

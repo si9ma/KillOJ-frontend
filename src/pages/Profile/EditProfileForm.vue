@@ -116,7 +116,6 @@
 import { Contains } from '@/service/util'
 import { AuthHeader } from '@/service/auth'
 import { ExtractJson } from '@/service/util'
-import axios from 'axios'
 
 export default {
   props: {
@@ -227,7 +226,7 @@ export default {
       })
     },
     updateInfo () {
-      axios({
+      this.$axios({
         url: this.$gbl.apiURL + '/profile',
         method: 'put',
         headers: AuthHeader(),
