@@ -348,6 +348,7 @@ export default {
                     this.$gbl.alert('success', '修改分组成功')
                 })
                 .catch((error) => {
+                    console.log(error.response)
                     // handle json response
                     var json = ExtractJson(error.response)
                     if (json) {

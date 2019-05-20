@@ -5,6 +5,7 @@ import GlobalDirectives from "./globalDirectives";
 import RTLPlugin from "./RTLPlugin";
 import Theme from "./theme";
 import Global from "./global";
+import Axios from "./axios";
 
 //css assets
 import "@/assets/sass/black-dashboard.scss";
@@ -20,5 +21,6 @@ export default {
     Vue.use(RTLPlugin);
     Vue.use(Theme);
     Vue.use(Global);
+    Vue.use(Axios);
   }
 }
