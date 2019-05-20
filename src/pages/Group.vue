@@ -427,10 +427,10 @@
           })
 
       },
-      onCopy: function (e) {
+      onCopy: function () {
         this.$gbl.alert('success', '复制成功')
       },
-      onError: function (e) {
+      onError: function () {
         this.$gbl.alert('danger', '复制失败')
       },
       handleCurrentChange (val) {
