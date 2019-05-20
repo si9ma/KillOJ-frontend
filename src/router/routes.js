@@ -10,7 +10,6 @@ const Profile = () =>
 const Notifications = () =>
   import(/* webpackChunkName: "common" */ '@/pages/Notifications.vue')
 const Icons = () => import(/* webpackChunkName: "common" */ '@/pages/Icons.vue')
-const Maps = () => import(/* webpackChunkName: "common" */ '@/pages/Maps.vue')
 const Typography = () =>
   import(/* webpackChunkName: "common" */ '@/pages/Typography.vue')
 const TableList = () =>
@@ -59,11 +58,6 @@ const routes = [
         path: 'icons',
         name: 'icons',
         component: Icons
-      },
-      {
-        path: 'maps',
-        name: 'maps',
-        component: Maps
       },
       {
         path: 'typography',
