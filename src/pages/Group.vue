@@ -124,9 +124,9 @@
 
 <script>
   import UserCard from './Profile/UserCard'
-  import { AuthHeader } from '@/service/auth'
-  import { ExtractJson } from '@/service/util'
-  import { Contains } from '@/service/util'
+  import { AuthHeader } from '../service/auth'
+  import { ExtractJson } from '../service/util'
+  import { Contains } from '../service/util'
 
   function groupCompareByID (order) {
     if (order === 'ascending') {
@@ -156,7 +156,7 @@
     components: {
       UserCard
     },
-    data () {
+    data: function () {
       let validateName = (rule, value, callback) => {
         // name shouldn't contains special character
         if (Contains(value, '!@#?')) {
@@ -166,7 +166,7 @@
         } else {
           callback()
         }
-      }
+      };
 
       return {
         groups: [],
@@ -193,18 +193,18 @@
         },
         groupRules: {
           name: [
-            { required: true, message: '输入名称', trigger: 'blur' },
-            { max: 50, message: '长度在不能超过50个字符', trigger: 'blur' },
-            { validator: validateName, trigger: 'blur' }
+            {required: true, message: '输入名称', trigger: 'blur'},
+            {max: 50, message: '长度在不能超过50个字符', trigger: 'blur'},
+            {validator: validateName, trigger: 'blur'}
           ],
         },
         inviteRules: {
           password: [
-            { max: 30, message: '长度在不能超过30个字符', trigger: 'blur' },
-            { validator: validateName, trigger: 'blur' }
+            {max: 30, message: '长度在不能超过30个字符', trigger: 'blur'},
+            {validator: validateName, trigger: 'blur'}
           ],
           timeout: [
-            { min: 60, max: 43200, type: 'number', message: '60 ~ 43200分钟', trigger: 'blur' }
+            {min: 60, max: 43200, type: 'number', message: '60 ~ 43200分钟', trigger: 'blur'}
           ],
         },
       }
@@ -217,7 +217,7 @@
     watch: {
       // when groups change ,resort
       groups (val) {
-        if (val != this.sortedGroups) {
+        if (val !== this.sortedGroups) {
           this.resortGroups(this.filter)
         }
       }
