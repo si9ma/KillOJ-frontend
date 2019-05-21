@@ -16,7 +16,9 @@ const TableList = () =>
   import(/* webpackChunkName: "common" */ '@/pages/TableList.vue')
 const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
+const Contest = () => import(/* webpackChunkName: "common" */ '@/pages/Contest.vue')
 const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGroup.vue')
+const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinContest.vue')
 
 import _ from 'lodash'
 import Vue from 'vue'
@@ -99,7 +101,19 @@ const routes = [
         name: 'groups',
         component: Group,
         beforeEnter: needLogin,
-      }
+      },
+      {
+        path: '/contests',
+        name: 'contests',
+        component: Contest,
+        beforeEnter: needLogin,
+      },
+      {
+        path: '/contests/join/:uuid',
+        name: 'join contest',
+        component: JoinContest,
+        beforeEnter: needLogin,
+      },
     ]
   },
   {path: '*', component: NotFound}

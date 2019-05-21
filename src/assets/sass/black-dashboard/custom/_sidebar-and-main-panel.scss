@@ -161,7 +161,7 @@
                 position: relative;
                 text-transform: uppercase;
                 cursor: pointer;
-                font-size: $font-size-xs;
+                font-size: $font-size-sm;
                 padding: 10px 8px;
                 line-height: $line-height-lg;
             }
@@ -245,7 +245,7 @@
 
         p{
             margin: 0;
-            font-weight: $font-weight-bold;
+            font-weight: $font-weight-extra-bold;
             color: rgba($white,0.8);
             line-height: 30px;
             position: relative;
@@ -336,7 +336,7 @@
             // font-size: $font-size-base;
             color: $white;
             text-decoration: none;
-            font-weight: $font-weight-normal;
+            font-weight: $font-weight-extra-bold;
             line-height: 30px;
             overflow: hidden;
         }
