@@ -13,7 +13,7 @@
       <div class="block block-four"></div>
       <a href="#">
         <img class="avatar"
-            :src="user.avatar ? user.avatar : 'img/anime3.png'"
+            :src="user.avatar ? user.avatar : '/img/anime3.png'"
             alt="...">
         <h5 class="title">{{user.name}}</h5>
       </a>

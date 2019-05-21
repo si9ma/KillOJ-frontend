@@ -16,17 +16,18 @@ const TableList = () =>
   import(/* webpackChunkName: "common" */ '@/pages/TableList.vue')
 const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
+const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGroup.vue')
 
 import _ from 'lodash'
 import Vue from 'vue'
-import { GetUserInfo } from '@/service/user'
+import {GetUserInfo} from '@/service/user'
 
 function needLogin(to, from, next) {
-  var user = GetUserInfo()
+  let user = GetUserInfo()
   // need login
   if (_.isEmpty(user)) {
     Vue.prototype.$gbl.alert('warning', '你还未登录，请登录')
-    return next('/login')
+    return next({path: '/login', query: {redirect: to.fullPath}})
   }
 
   next()
@@ -73,19 +74,25 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Auth,
-        props: { HandleType: 'login' }
+        props: {HandleType: 'login'}
       },
       {
         path: '/signup',
         name: 'signup',
         component: Auth,
-        props: { HandleType: 'signup' }
+        props: {HandleType: 'signup'}
       },
       {
         path: '/auth3rd/:provider/callback',
         name: 'auth',
         component: Auth,
-        props: { HandleType: 'auth' }
+        props: {HandleType: 'auth'}
+      },
+      {
+        path: '/groups/join/:uuid',
+        name: 'join group',
+        component: JoinGroup,
+        beforeEnter: needLogin,
       },
       {
         path: '/groups',
@@ -95,7 +102,7 @@ const routes = [
       }
     ]
   },
-  { path: '*', component: NotFound }
+  {path: '*', component: NotFound}
 ]
 
 /**

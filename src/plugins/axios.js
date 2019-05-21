@@ -26,7 +26,7 @@ http.interceptors.response.use(
       if (json && json.error.code == 40100) {
         console.log(Vue.prototype.$gbl.apiURL)
         Vue.prototype.$gbl.alert('danger', '你还未登录，请登录')
-        router.push('/login')
+        return router.push({path: '/login', query: {redirect: router.currentRoute.fullPath}})
       }
     }
     return Promise.reject(error)

@@ -1,10 +1,10 @@
 import axios from 'axios'
 import _ from 'lodash'
-import { AuthHeader } from './auth'
+import {AuthHeader} from './auth'
 import store from '../store'
 import Vue from 'vue'
 
-export function GetUserInfo () {
+export function GetUserInfo() {
   // if user info exist, return directly
   let user = store.state.userInfo
 
@@ -23,7 +23,7 @@ export function GetUserInfo () {
       store.commit('updateUserInfo', response.data)
       return response.data
     })
-    .catch(function (error) {
+    .catch(error => {
       console.log('get user profile fail', error.response, error)
     })
 }
