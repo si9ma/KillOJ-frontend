@@ -22,17 +22,18 @@ const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinC
 
 import _ from 'lodash'
 import Vue from 'vue'
-import {GetUserInfo} from '@/service/user'
+import {GetUserInfo} from '../service/user'
 
 function needLogin(to, from, next) {
-  let user = GetUserInfo()
-  // need login
-  if (_.isEmpty(user)) {
+  GetUserInfo().then(user => {
+    next()
+  }).catch(() => {
     Vue.prototype.$gbl.alert('warning', '你还未登录，请登录')
-    return next({path: '/login', query: {redirect: to.fullPath}})
-  }
-
-  next()
+    return next({
+      path: '/login',
+      query: {redirect: to.fullPath, nocheck: '1'}
+    })
+  })
 }
 
 const routes = [

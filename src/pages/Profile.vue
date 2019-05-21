@@ -13,24 +13,25 @@
   import EditProfileForm from './Profile/EditProfileForm';
   import UserCard from './Profile/UserCard'
   import _ from 'lodash'
-  import { GetUserInfo } from '@/service/user'
+  import {GetUserInfo} from '@/service/user'
 
   export default {
     components: {
       EditProfileForm,
       UserCard
     },
-    data () {
+    data() {
       return {
         user: {}
       }
     },
-    created () {
-      this.user = GetUserInfo()
-      if (_.isEmpty(this.user)) {
+    created() {
+      GetUserInfo().then(() => {
+        console.log('get user info successful')
+      }).catch(() => {
         this.$gbl.alert('warning', '你还未登录，请登录')
-        this.$router.push('/login')
-      }
+        this.$router.push({path: '/login', query: {nocheck: '1'}})
+      })
     }
   }
 </script>

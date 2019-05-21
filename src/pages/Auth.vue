@@ -119,7 +119,13 @@
   import {Contains, ExtractJson} from '../service/util'
 
   export default {
-    props: ['HandleType'],
+    props: {
+      HandleType: {
+        type: String,
+        default: "login",
+        description: "handle type (signup or login or auth)"
+      }
+    },
     data() {
       let validatePass = (rule, value, callback) => {
         if (value === '') {
@@ -209,11 +215,12 @@
           return
       }
 
-      // check if user already login
-      let user = GetUserInfo()
-      if (user) {
-        this.$gbl.alert('success','自动登录成功')
-        this.$router.push(this.$router.currentRoute.query.redirect || '/')
+      if (this.$router.currentRoute.query.nocheck === undefined) {
+        // check if user already login, only when user type url in address bar
+        GetUserInfo().then(() => {
+          this.$gbl.alert('success', '自动登录成功')
+          this.$router.push(this.$router.currentRoute.query.redirect || '/')
+        })
       }
     },
     methods: {
@@ -246,9 +253,10 @@
             // save token
             console.log('login successful!')
             localStorage.setItem('jwt', JSON.stringify(response.data))
-            GetUserInfo()
-            this.$gbl.alert('success', '登录成功')
-            this.$router.push(this.$router.currentRoute.query.redirect || '/')
+            GetUserInfo().then(() => {
+              this.$gbl.alert('success', '登录成功')
+              this.$router.push(this.$router.currentRoute.query.redirect || '/')
+            })
           })
           .catch((error) => {
             // handle json response
@@ -275,10 +283,11 @@
             // save token
             console.log('login successful!')
             localStorage.setItem('jwt', JSON.stringify(response.data))
-            GetUserInfo()
-            this.authing = false
-            this.$gbl.alert('success', '认证成功')
-            this.$router.push(this.$router.currentRoute.query.redirect || '/')
+            GetUserInfo().then(() => {
+              this.authing = false
+              this.$gbl.alert('success', '认证成功')
+              this.$router.push(this.$router.currentRoute.query.redirect || '/')
+            })
           })
           .catch((error) => {
             // handle json response

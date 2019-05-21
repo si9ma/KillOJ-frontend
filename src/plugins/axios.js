@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '../router/index'
 import Vue from 'vue'
-import { ExtractJson } from '@/service/util'
+import {ExtractJson} from '@/service/util'
 
 const http = axios.create()
 
@@ -26,7 +26,10 @@ http.interceptors.response.use(
       if (json && json.error.code == 40100) {
         console.log(Vue.prototype.$gbl.apiURL)
         Vue.prototype.$gbl.alert('danger', '你还未登录，请登录')
-        return router.push({path: '/login', query: {redirect: router.currentRoute.fullPath}})
+        return router.push({
+          path: '/login',
+          query: {redirect: router.currentRoute.fullPath,nocheck: '1'}
+        })
       }
     }
     return Promise.reject(error)

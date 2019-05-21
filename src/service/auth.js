@@ -21,25 +21,26 @@ export function IsTokenEmpty () {
   return true
 }
 
-export function RefreshToken (t) {
-  if (IsTokenEmpty()) {
-    t.$router.push('/login')
-  }
-
-  axios({
-    url: t.$gbl.apiURL + '/auth/refresh_token',
-    method: 'get',
-    headers: AuthHeader()
-  })
-    .then(response => {
-      // save token
-      console.log('refresh token success')
-      localStorage.setItem('jwt', JSON.stringify(response.data))
-      return true // refresh token success
-    })
-    .catch(error => {
-      // handle json response
-      console.log('refresh token fail', error.response)
-      t.$router.push('/') // should login
-    })
-}
+// export function RefreshToken (t) {
+//   if (IsTokenEmpty()) {
+//     t.$router.push({path: '/login', query: {nocheck: '1'}})
+//     t.$router.push('/login')
+//   }
+//
+//   axios({
+//     url: t.$gbl.apiURL + '/auth/refresh_token',
+//     method: 'get',
+//     headers: AuthHeader()
+//   })
+//     .then(response => {
+//       // save token
+//       console.log('refresh token success')
+//       localStorage.setItem('jwt', JSON.stringify(response.data))
+//       return true // refresh token success
+//     })
+//     .catch(error => {
+//       // handle json response
+//       console.log('refresh token fail', error.response)
+//       t.$router.push('/') // should login
+//     })
+// }
