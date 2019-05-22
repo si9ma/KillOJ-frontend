@@ -3,14 +3,19 @@
     <!--for fullscreen loading-->
     <a v-loading.fullscreen.lock="doing"></a>
 
-    <!--manage contests-->
     <div class="row">
-      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
+      <div class="col-md-12">
         <el-button type="primary"
                    @click="addContest"
                    size="small"
                    class="mb-3">添加比赛
         </el-button>
+      </div>
+    </div>
+
+    <!--manage contests-->
+    <div class="row">
+      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="contestTable"
                   :data="finalContests"
                   @sort-change="resortContests"

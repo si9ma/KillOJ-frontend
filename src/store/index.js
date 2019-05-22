@@ -12,8 +12,18 @@ export default new Vuex.Store({
   // plugins: [createPersistedState()],
   mutations: {
     // update user info
-    updateUserInfo (state, newUserInfo) {
+    updateUserInfo(state, newUserInfo) {
       state.userInfo = newUserInfo
+    },
+    updateTheme(state, newTheme) {
+      if (state.userInfo) {
+        state.userInfo.theme.theme = newTheme
+      }
+    },
+    updateSidebarBG(state, newBG) {
+      if (state.userInfo) {
+        state.userInfo.theme.sidebar_bg = newBG
+      }
     }
   }
 })

@@ -5,12 +5,16 @@
 
     <!--manage groups-->
     <div class="row">
-      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
+      <div class="col-md-12">
         <el-button type="primary"
                    @click="addGroup"
                    size="small"
                    class="mb-3">添加分组
         </el-button>
+      </div>
+    </div>
+    <div class="row">
+      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="groupTable"
                   :data="finalGroups"
                   @sort-change="resortGroups"
