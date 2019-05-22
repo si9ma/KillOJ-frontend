@@ -12,10 +12,11 @@
                    class="mb-3">添加比赛
         </el-button>
         <el-table ref="contestTable"
-                  :data="filteredContests"
+                  :data="finalContests"
                   @sort-change="resortContests"
                   @header-click="noShowInfo"
                   @row-click="showInfo"
+                  @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
                   style="width: 100%">
@@ -28,15 +29,16 @@
                            label="名称"
                            sortable>
           </el-table-column>
-          <el-table-column prop="tag"
+          <el-table-column prop="tags"
                            label="标签"
                            width="100"
+                           column-key="tags"
                            :filters="[{ text: 'Owner', value: 'Owner' }]"
-                           :filter-method="filterTag"
                            filter-placement="bottom-end">
             <template slot-scope="scope">
-              <el-tag size="small" v-if="scope.row.owner.id === mySelf.id">
-                Owner
+              <el-tag size="small" v-for="(tag,index) in scope.row.tags"
+                      :key="index">
+                {{tag.name}}
               </el-tag>
             </template>
           </el-table-column>
@@ -233,13 +235,15 @@
         groups: [],
         sortedContests: [],
         filteredContests: [],
+        finalContests: [],
         currentPage: 1,
         pageSize: 10,
-        filter: {
+        sorter: {
           column: {},
           order: 'ascending',
           prop: '',
         },
+        filter: {},
         sidebar: false,
         isAddContest: false,
         activeContest: {
@@ -284,8 +288,8 @@
     watch: {
       // when contests change ,resort
       contests(val) {
-        if (val !== this.sortedContests) {
-          this.resortContests(this.filter)
+        if (val !== this.filteredContests) {
+          this.filterChange(this.filter)
         }
       }
     },
@@ -304,6 +308,16 @@
       })
         .then(response => {
           this.contests = response.data
+
+          // add tag to each contest
+          this.contests.forEach(el => {
+            if (el.owner.id === this.mySelf.id) {
+              el.tags = [{name: 'Owner'}]
+            } else {
+              el.tags = []
+            }
+          })
+
           this.filterContests()
           console.log('get contests success')
           this.$gbl.alert('success', '获取比赛成功')
@@ -354,12 +368,25 @@
         })
     },
     methods: {
-      filterTag(value, row) {
-        return row.owner.id === this.mySelf.id
-      },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
+      filterChange(filter) {
+        this.filter = filter // save filter
+        this.filteredContests = [...this.contests]
+        for (let key in filter) {
+          this.filteredContests = this.filteredContests.filter(contest => {
+            if (filter[key].length > 0) {
+              switch (key) {
+                case 'tags':
+                  return contest[key].some(el => filter[key].includes(el.name)) // we should check name field of tag
+                default:
+                  return contest[key].some(el => filter[key].includes(el))
+              }
+            }
+
+            return true
+          })
+        }
+
+        this.resortContests(this.sorter)
       },
       showInfo(row, column, event) {
         this.sidebar = true
@@ -419,6 +446,8 @@
             console.log('create contest successful!')
             let newContest = response.data
             newContest.owner = this.$store.state.userInfo // important, we need as info of myself
+            newContest.tags = [{name: "Owner"}] // add owner tag
+
             this.contests.push(newContest)
             this.$gbl.alert('success', '添加比赛成功')
           })
@@ -563,8 +592,8 @@
       resortContests(val) {
         let byID = contestCompareByID(val.order)
         let byName = contestCompareByName(val.order)
-        this.sortedContests = [...this.contests] // deep copy
-        this.filter = val // save sort config
+        this.sortedContests = [...this.filteredContests] // deep copy
+        this.sorter = val // save sort config
 
         // if prop is empty, reset to contests
         switch (val.prop) {
@@ -580,7 +609,7 @@
       filterContests() {
         let from = (this.currentPage - 1) * this.pageSize
         let to = this.currentPage * this.pageSize
-        this.filteredContests = this.sortedContests.slice(from, to)
+        this.finalContests = this.sortedContests.slice(from, to)
       }
     }
   }

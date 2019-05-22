@@ -12,10 +12,11 @@
                    class="mb-3">添加分组
         </el-button>
         <el-table ref="groupTable"
-                  :data="filteredGroups"
+                  :data="finalGroups"
                   @sort-change="resortGroups"
                   @header-click="noShowInfo"
                   @row-click="showInfo"
+                  @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
                   style="width: 100%">
@@ -28,15 +29,16 @@
                            label="名称"
                            sortable>
           </el-table-column>
-          <el-table-column prop="tag"
+          <el-table-column prop="tags"
                            label="标签"
                            width="100"
+                           column-key="tags"
                            :filters="[{ text: 'Owner', value: 'Owner' }]"
-                           :filter-method="filterTag"
                            filter-placement="bottom-end">
             <template slot-scope="scope">
-              <el-tag size="small" v-if="scope.row.owner.id === mySelf.id">
-                Owner
+              <el-tag size="small" v-for="(tag,index) in scope.row.tags"
+                      :key="index">
+                {{tag.name}}
               </el-tag>
             </template>
           </el-table-column>
@@ -192,13 +194,15 @@
         groups: [],
         sortedGroups: [],
         filteredGroups: [],
+        finalGroups: [],
         currentPage: 1,
         pageSize: 10,
-        filter: {
+        sorter: {
           column: {},
           order: 'ascending',
           prop: '',
         },
+        filter: {},
         sidebar: false,
         isAddGroup: false,
         activeGroup: null,
@@ -236,8 +240,8 @@
     watch: {
       // when groups change ,resort
       groups(val) {
-        if (val !== this.sortedGroups) {
-          this.resortGroups(this.filter)
+        if (val !== this.filteredGroups) {
+          this.filterChange(this.filter)
         }
       }
     },
@@ -254,6 +258,16 @@
       })
         .then(response => {
           this.groups = response.data
+
+          // add tag to each group
+          this.groups.forEach(el => {
+            if (el.owner.id === this.mySelf.id) {
+              el.tags = [{name: 'Owner'}]
+            } else {
+              el.tags = []
+            }
+          })
+
           this.filterGroups()
           console.log('get groups success')
           this.doing = false
@@ -275,12 +289,25 @@
         })
     },
     methods: {
-      filterTag(value, row) {
-        return row.owner.id === this.mySelf.id
-      },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
+      filterChange(filter) {
+        this.filter = filter // save filter
+        this.filteredGroups = [...this.groups]
+        for (let key in filter) {
+          this.filteredGroups = this.filteredGroups.filter(group => {
+            if (filter[key].length > 0) {
+              switch (key) {
+                case 'tags':
+                  return group[key].some(el => filter[key].includes(el.name)) // we should check name field of tag
+                default:
+                  return group[key].some(el => filter[key].includes(el))
+              }
+            }
+
+            return true
+          })
+        }
+
+        this.resortGroups(this.sorter)
       },
       showInfo(row, column, event) {
         this.sidebar = true
@@ -334,6 +361,7 @@
             console.log('create group successful!')
             let newGroup = response.data
             newGroup.owner = this.$store.state.userInfo // important, we need as info of myself
+            newGroup.tags = [{name: "Owner"}] // add owner tag
             this.groups.push(newGroup)
             this.$gbl.alert('success', '添加分组成功')
           })
@@ -371,7 +399,7 @@
         })
           .then((response) => {
             console.log('update group successful!')
-            let foundIndex = this.groups.findIndex(x => x.id == this.activeGroup.id);
+            let foundIndex = this.groups.findIndex(x => x.id === this.activeGroup.id);
             this.groups[foundIndex] = this.activeGroup
             this.$gbl.alert('success', '修改分组成功')
           })
@@ -463,20 +491,18 @@
         this.$gbl.alert('danger', '复制失败')
       },
       handleCurrentChange(val) {
-        console.log('current change', val)
         this.currentPage = val
         this.filterGroups()
       },
       handleSizeChange(val) {
-        console.log('page size change', val)
         this.pageSize = val
         this.filterGroups()
       },
       resortGroups(val) {
         let byID = groupCompareByID(val.order)
         let byName = groupCompareByName(val.order)
-        this.sortedGroups = [...this.groups] // deep copy
-        this.filter = val // save sort config
+        this.sortedGroups = [...this.filteredGroups] // deep copy
+        this.sorter = val // save sort config
 
         // if prop is empty, reset to groups
         switch (val.prop) {
@@ -492,7 +518,7 @@
       filterGroups() {
         let from = (this.currentPage - 1) * this.pageSize
         let to = this.currentPage * this.pageSize
-        this.filteredGroups = this.sortedGroups.slice(from, to)
+        this.finalGroups = this.sortedGroups.slice(from, to)
       }
     }
   }

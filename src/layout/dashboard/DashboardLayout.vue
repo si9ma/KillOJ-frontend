@@ -4,6 +4,7 @@
       <template slot="links">
         <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
         <sidebar-link to="/icons" :name="$t('sidebar.icons')" icon="tim-icons icon-atom"/>
+        <sidebar-link to="/problems" name="题目" :fwicon="['fas','drum-steelpan']"/>
         <sidebar-link to="/groups" name="分组" :fwicon="['fas','users']"/>
         <sidebar-link to="/contests" name="比赛" :fwicon="['fas','trophy']"/>
         <sidebar-link to="/notifications" :name="$t('sidebar.notifications')" icon="tim-icons icon-bell-55"/>

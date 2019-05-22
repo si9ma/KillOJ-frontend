@@ -17,6 +17,7 @@ const TableList = () =>
 const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
 const Contest = () => import(/* webpackChunkName: "common" */ '@/pages/Contest.vue')
+const Problem = () => import(/* webpackChunkName: "common" */ '@/pages/Problem.vue')
 const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGroup.vue')
 const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinContest.vue')
 
@@ -25,7 +26,7 @@ import Vue from 'vue'
 import {GetUserInfo} from '../service/user'
 
 function needLogin(to, from, next) {
-  GetUserInfo().then(user => {
+  GetUserInfo().then(() => {
     next()
   }).catch(() => {
     Vue.prototype.$gbl.alert('warning', '你还未登录，请登录')
@@ -107,6 +108,12 @@ const routes = [
         path: '/contests',
         name: 'contests',
         component: Contest,
+        beforeEnter: needLogin,
+      },
+      {
+        path: '/problems',
+        name: 'problems',
+        component: Problem,
         beforeEnter: needLogin,
       },
       {
