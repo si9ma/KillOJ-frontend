@@ -17,12 +17,7 @@ export default new Vuex.Store({
     },
     updateTheme(state, newTheme) {
       if (state.userInfo) {
-        state.userInfo.theme.theme = newTheme
-      }
-    },
-    updateSidebarBG(state, newBG) {
-      if (state.userInfo) {
-        state.userInfo.theme.sidebar_bg = newBG
+        state.userInfo.theme = newTheme
       }
     }
   }

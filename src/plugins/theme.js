@@ -6,46 +6,38 @@ export default {
   install(Vue) {
     let theme = new Vue({
       data: {
-        isDarkLocal: true,
-        sidebarBGLocal: 'blue'
+        isDark: true,
+        sidebarBG: 'blue'
       },
       computed: {
-        isDark: {
-          get() {
-            if (!_.isEmpty(store.state.userInfo)) {
-              return store.state.userInfo.theme.theme === 0
-            }
-
-            return this.isDarkLocal // if user no login, use local variable
-          },
-          set(value) {
-            if (!_.isEmpty(store.state.userInfo)) {
-              store.commit('updateTheme', value ? 0 : 1)
-            }
-
-            this.isDarkLocal = !this.isDarkLocal // if user no login, use local variable
+        userConfig() {
+          if (store.state.userInfo) {
+            return store.state.userInfo.theme
           }
-        },
-        sidebarBG: {
-          get() {
-            if (!_.isEmpty(store.state.userInfo)) {
-              return store.state.userInfo.theme.sidebar_bg
-            }
 
-            return this.sidebarBGLocal // if user no login, use local variable
-          },
-          set(value) {
-            if (!_.isEmpty(store.state.userInfo)) {
-              store.commit('updateSidebarBG', value)
-            }
+          return null
+        }
+      },
+      watch: {
+        userConfig(newVal, oldVal) {
+          if (newVal) {
+            this.isDark = newVal.theme === 0
+            this.sidebarBG = newVal.sidebar_bg
+          }
 
-            this.sidebarBGLocal = value // if user no login, use local variable
+          // when user login
+          if (!oldVal && newVal) {
+            this.modifyBodyStyle()
           }
         }
       },
       methods: {
         changeTheme() {
           this.isDark = !this.isDark
+          this.modifyBodyStyle()
+          this.submit()
+        },
+        modifyBodyStyle() {
           const el = document.body
           const className = 'white-content'
           if (this.isDark) {
@@ -53,14 +45,11 @@ export default {
           } else {
             el.classList.add(className)
           }
-          this.submit()
-        }
-        ,
+        },
         changeSidebar(bg) {
           this.sidebarBG = bg
           this.submit()
-        }
-        ,
+        },
         submit() {
           if (_.isEmpty(store.state.userInfo)) {
             return // if user no login, don't submit
@@ -77,6 +66,7 @@ export default {
             }
           }).then(response => {
             this.$gbl.alert('success', '修改主题成功')
+            store.commit('updateTheme', response.data)
           }).catch(error => {
             let json = ExtractJson(error.response)
             if (json) {
@@ -85,8 +75,7 @@ export default {
               this.$gbl.alert('danger', '修改主题出错')
             }
           })
-        }
-        ,
+        },
         tableTheme({row, column, rowIndex, columnIndex}) {
           if (this.isDark) {
             return {
