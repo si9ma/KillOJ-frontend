@@ -325,7 +325,6 @@
 
           this.filterContests()
           console.log('get contests success')
-          this.$gbl.alert('success', '获取比赛成功')
         })
         .catch(error => {
 
@@ -355,7 +354,6 @@
           this.groups = response.data
           console.log('get groups success')
           this.doing = false
-          this.$gbl.alert('success', '获取分组成功')
         })
         .catch(error => {
           this.doing = false
@@ -560,7 +558,6 @@
           .then((response) => {
             console.log('get invite info successful!')
             this.inviteURL = _.join([window.location.origin, 'contests/join', response.data.id], '/')
-            this.$gbl.alert('success', '获取邀请信息成功')
             this.doing = false
           })
           .catch((error) => {

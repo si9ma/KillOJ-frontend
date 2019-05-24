@@ -12,7 +12,6 @@
 <script>
   import EditProfileForm from './Profile/EditProfileForm';
   import UserCard from './Profile/UserCard'
-  import _ from 'lodash'
   import {GetUserInfo} from '@/service/user'
 
   export default {
@@ -26,7 +25,8 @@
       }
     },
     created() {
-      GetUserInfo().then(() => {
+      GetUserInfo().then((response) => {
+        this.user = response
         console.log('get user info successful')
       }).catch(() => {
         this.$gbl.alert('warning', '你还未登录，请登录')

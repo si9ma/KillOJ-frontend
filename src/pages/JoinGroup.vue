@@ -92,7 +92,6 @@
         }
 
         this.doing = false
-        this.$gbl.alert('success', '获取分组信息成功')
       }).catch(error => {
         this.doing = false
 

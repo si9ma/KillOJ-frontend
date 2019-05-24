@@ -4,7 +4,22 @@ export default {
     let global = new Vue({
       data() {
         return {
-          apiURL: 'http://127.0.0.1/api'
+          apiURL: 'http://127.0.0.1/api',
+          mdtoolbars: {
+            bold: true,
+            italic: true,
+            underline: true,
+            strikethrough: true,
+            mark: true,
+            quote: true,
+            ol: true,
+            ul: true,
+            code: true,
+
+            trash: true,
+
+            subfield: true,
+          }
         }
       },
       methods: {

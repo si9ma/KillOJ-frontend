@@ -275,7 +275,6 @@
           this.filterGroups()
           console.log('get groups success')
           this.doing = false
-          this.$gbl.alert('success', '获取分组成功')
         })
         .catch(error => {
           this.doing = false
@@ -470,7 +469,6 @@
           .then((response) => {
             console.log('get invite info successful!')
             this.inviteURL = _.join([window.location.origin, 'groups/join', response.data.id], '/')
-            this.$gbl.alert('success', '获取邀请信息成功')
             this.doing = false
           })
           .catch((error) => {
@@ -527,3 +525,9 @@
     }
   }
 </script>
+
+<style>
+  .el-table--enable-row-hover .el-table__body tr:hover>td{
+    background-color: #f5f6fa !important;
+  }
+</style>

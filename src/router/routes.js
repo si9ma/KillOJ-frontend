@@ -18,6 +18,7 @@ const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
 const Contest = () => import(/* webpackChunkName: "common" */ '@/pages/Contest.vue')
 const Problems = () => import(/* webpackChunkName: "common" */ '@/pages/Problems.vue')
+const Problem = () => import(/* webpackChunkName: "common" */ '@/pages/Problem.vue')
 const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGroup.vue')
 const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinContest.vue')
 
@@ -115,6 +116,17 @@ const routes = [
         name: 'problems',
         component: Problems,
         beforeEnter: needLogin,
+      },
+      {
+        path: '/problems/:problemID',
+        name: 'problem',
+        component: Problem,
+        beforeEnter: needLogin,
+        props: function (route) {
+          return {
+            problemID: Number(route.params.problemID),
+          };
+        }
       },
       {
         path: '/contests/join/:uuid',

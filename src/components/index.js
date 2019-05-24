@@ -9,6 +9,7 @@ import BaseAlert from "./BaseAlert";
 import BaseNav from "./BaseNav";
 import Modal from "./Modal";
 import CloseButton from "./CloseButton";
+import SplitPanel from "./SplitPanel";
 
 import Card from "./Cards/Card.vue";
 import StatsCard from "./Cards/StatsCard.vue";
@@ -26,6 +27,7 @@ export {
   BaseRadio,
   BaseDropdown,
   BaseButton,
+  SplitPanel,
   BaseAlert,
   SidebarPlugin,
   BaseNav

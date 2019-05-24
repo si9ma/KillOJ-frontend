@@ -9,7 +9,7 @@
         <p class="card-category" v-if="subTitle">{{subTitle}}</p>
       </slot>
     </div>
-    <div class="card-body" v-if="$slots.default">
+    <div :class="bodyClasses" class="card-body" v-if="$slots.default">
       <slot></slot>
     </div>
     <div class="card-image" v-if="$slots['image-bottom']">
@@ -36,6 +36,10 @@
       type: {
         type: String,
         description: "Card type (e.g primary/danger etc)"
+      },
+      compactBody: {
+        type: Boolean,
+        description: "body without padding"
       },
       headerClasses: {
         type: [String, Object, Array],

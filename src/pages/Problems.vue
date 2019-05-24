@@ -10,6 +10,7 @@
         <div class="row">
           <div class="col-md-9">
             <el-button type="primary"
+                       @click="$router.push('/problems/0')"
                        size="mini"
                        class="mb-3">添加试题
             </el-button>
@@ -42,6 +43,7 @@
                   :data="finalProblems"
                   @sort-change="resortProblems"
                   @filter-change="filterChange"
+                  @row-click="toProblem"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
                   style="width: 100%">
@@ -236,6 +238,12 @@
       }
     },
     created() {
+      let filter = this.$router.currentRoute.query.filter
+      if (filter) {
+        this.filter = JSON.parse(filter)
+        console.log(this.filter)
+      }
+
       this.doing = true
       const problemsPromise = this.$axios({
         method: 'get',
@@ -257,7 +265,6 @@
 
           this.filterProblems()
           console.log('get problems success')
-          this.$gbl.alert('success', '获取试题成功')
         })
         .catch(error => {
           // handle json response
@@ -283,7 +290,6 @@
         .then(response => {
           this.tags = response.data
           console.log('get tags success')
-          this.$gbl.alert('success', '获取tag成功')
         })
         .catch(error => {
           // handle json response
@@ -309,7 +315,6 @@
         .then(response => {
           this.catalogs = response.data
           console.log('get catalogs success')
-          this.$gbl.alert('success', '获取分类成功')
         })
         .catch(error => {
           // handle json response
@@ -391,6 +396,9 @@
         }) : [...this.problems]
 
         this.filterChange(this.filter)
+      },
+      toProblem(row) {
+        this.$router.push('/problems/' + row.id)
       }
     }
   }

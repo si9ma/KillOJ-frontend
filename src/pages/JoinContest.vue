@@ -92,7 +92,6 @@
         }
 
         this.doing = false
-        this.$gbl.alert('success', '获取比赛信息成功')
       }).catch(error => {
         this.doing = false
 
