@@ -251,64 +251,66 @@
                            right-key="expected_output"
                            v-model="problem.test_cases[index]"/>
             </card>
-            <card v-if="!isAdd && !isEdit" body-classes="compact-card-body">
-              <div slot="header">
-                <div class="row pb-2 pt-2">
-                  <div class="col-6">
-                    <p style="display: inline">语言: </p>
-                    <el-select size="mini"
-                               v-model="language"
-                               @change="changeLang"
-                               filterable
-                               default-first-option
-                               placeholder="语言">
-                      <el-option
-                        v-for="item in languages"
-                        :key="item.key"
-                        :label="item.name"
-                        :value="item">
-                      </el-option>
-                    </el-select>
-                  </div>
-                  <div class="col-6 text-right">
-                    <p style="display: inline;">主题: </p>
-                    <el-select size="mini"
-                               v-model="cmOptions.theme"
-                               filterable
-                               default-first-option
-                               placeholder="主题">
-                      <el-option
-                        v-for="item in themes"
-                        :key="item.value"
-                        :label="item.name"
-                        :value="item.value">
-                      </el-option>
-                    </el-select>
+          </el-form>
+          <card v-if="!isAdd && !isEdit" body-classes="compact-card-body">
+            <div slot="header">
+              <div class="row pb-2 pt-2">
+                <div class="col-6">
+                  <p style="display: inline">语言: </p>
+                  <el-select size="mini"
+                             v-model="language"
+                             @change="changeLang"
+                             filterable
+                             default-first-option
+                             placeholder="语言">
+                    <el-option
+                      v-for="item in languages"
+                      :key="item.key"
+                      :label="item.name"
+                      :value="item">
+                    </el-option>
+                  </el-select>
+                </div>
+                <div class="col-6 text-right">
+                  <p style="display: inline;">主题: </p>
+                  <el-select size="mini"
+                             v-model="cmOptions.theme"
+                             filterable
+                             default-first-option
+                             placeholder="主题">
+                    <el-option
+                      v-for="item in themes"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
 
-                    <p style="display:inline;" class="ml-2">KeyMap: </p>
-                    <el-select size="mini"
-                               v-model="cmOptions.keyMap"
-                               filterable
-                               default-first-option
-                               placeholder="KeyMap">
-                      <el-option
-                        v-for="item in keymaps"
-                        :key="item.value"
-                        :label="item.name"
-                        :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </div>
+                  <p style="display:inline;" class="ml-2">KeyMap: </p>
+                  <el-select size="mini"
+                             v-model="cmOptions.keyMap"
+                             filterable
+                             default-first-option
+                             placeholder="KeyMap">
+                    <el-option
+                      v-for="item in keymaps"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
                 </div>
               </div>
-              <codemirror v-model="code" :options="cmOptions"></codemirror>
-            </card>
+            </div>
+            <codemirror v-model="code" :options="cmOptions"></codemirror>
+          </card>
 
-            <el-button size="mini" type="primary"
-                       @click="isAdd ? submitForm('problemForm','add') : submitForm('problemForm','update')">
-              提交
-            </el-button>
-          </el-form>
+          <el-button type="primary"
+                     size="mini"
+                     :disabled="judging"
+                     @click="submit()">
+            提 交
+          </el-button>
         </div>
         <div class="col-md-2 mt-1" v-if="!isEdit && !isAdd">
           <card>
@@ -364,9 +366,155 @@
           <user-card v-if="problem.owner"
                      :user="problem.owner"
                      title="Owner信息"></user-card>
+
+          <!--         last submit      -->
+          <div class="fail-submit">
+            <card v-if="lastSubmit">
+              <div slot="header">
+                <div class="row">
+                  <font-awesome-icon size="sm" class="ml-1" :color="$theme.isDark ? 'white' : 'black'" :icon="['fab','lastfm']"/>
+                  <span class="ml-2">最近一次提交</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 text-center">
+                  <h5 :style="{color: lastSubmit.result !== 0 ? '#f56c6c' : '#67c23a'}">{{results[lastSubmit.result]}}</h5>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>语言</p>
+                </div>
+                <div class="col-6">
+                  <el-tag size="mini" type="primary">
+                    {{languages[lastSubmit.language].name}}
+                  </el-tag>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>运行时间</p>
+                </div>
+                <div class="col-6">
+                  <p>{{lastSubmit.run_time}}MS</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>占用内存</p>
+                </div>
+                <div class="col-6">
+                  <p>{{lastSubmit.memory_usage}}KB</p>
+                </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-12 text-center">
+                  <el-button @click="loadSubmit(lastSubmit)" size="mini" type="primary">
+                    加载
+                  </el-button>
+                </div>
+              </div>
+
+            </card>
+          </div>
+
+          <div class="success-submit">
+            <card v-if="lastSuccessSubmit">
+              <div slot="header">
+                <font-awesome-icon size="sm" class="ml-1" :color="$theme.isDark ? 'white' : 'black'" :icon="['fab','lastfm']"/>
+                <span class="ml-2">最近一次成功提交</span>
+              </div>
+
+              <div class="row">
+                <div class="col-12 text-center">
+                  <h5 :style="{color: lastSuccessSubmit.result !== 0 ? '#f56c6c' : '#67c23a'}">{{results[lastSuccessSubmit.result]}}</h5>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>语言</p>
+                </div>
+                <div class="col-6">
+                  <el-tag size="mini" type="primary">
+                    {{languages[lastSuccessSubmit.language].name}}
+                  </el-tag>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>运行时间</p>
+                </div>
+                <div class="col-6">
+                  <p>{{lastSuccessSubmit.run_time}}MS</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 text-right">
+                  <p>占用内存</p>
+                </div>
+                <div class="col-6">
+                  <p>{{lastSuccessSubmit.memory_usage}}KB</p>
+                </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-12 text-center">
+                  <el-button @click="loadSubmit(lastSuccessSubmit)" size="mini" type="primary">
+                    加载
+                  </el-button>
+                </div>
+              </div>
+
+            </card>
+          </div>
         </div>
       </div>
     </div>
+
+    <el-dialog :visible.sync="showResult" :width="isError ? '30%' : '20%'" center>
+      <h4 slot="title" :style="{color: isError ? '#f56c6c' : '#67c23a' }">{{judgeResult.status && judgeResult.status.msg}}</h4>
+      <div class="row">
+        <div class="col-12 text-center">
+          <h5 :style="{color: isError ? '#f56c6c' : '#67c23a' }">{{judgeResult.message}}</h5>
+        </div>
+      </div>
+      <!--      only when wrong answer or Accepted      -->
+      <div v-if="judgeResult.status && (judgeResult.status.code === 0 || judgeResult.status.code === 6)" class="row">
+        <div class="col-12 text-center">
+          <h4>{{judgeResult.success_test_case * 100 / judgeResult.test_case_num}} %</h4>
+        </div>
+      </div>
+      <div v-if="judgeResult.runtime" class="row">
+        <div class="col-6 text-right">
+          <p>运行时间</p>
+        </div>
+        <div class="col-6">
+          <p>{{judgeResult.runtime}}MS</p>
+        </div>
+      </div>
+      <div v-if="judgeResult.memory" class="row">
+        <div class="col-6 text-right">
+          <p>占用内存</p>
+        </div>
+        <div class="col-6">
+          <p>{{judgeResult.memory}}KB</p>
+        </div>
+      </div>
+      <div v-if="isError && judgeResult.stderr" class="row">
+        <pre class="ml-3 mr-3" style="background:#f4f4f4;color: #f56c6c; max-height: 200px;width: 100%">{{judgeResult.stderr}}</pre>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" size="mini" @click="showResult = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -410,18 +558,26 @@
         },
         isSampleCollapse: true,
         isTestCaseCollapse: true,
+        judging: false,
         isAdd: this.problemID === 0, // 0 for add new problem
+        isError: true,
+        templates: [],
         isEdit: false,
+        showResult: false,
         catalogs: [],
         contests: [],
         alreadyPull4Edit: false,
+        judgeResult: {},
         groups: [],
+        lastSubmit: null,
+        lastSuccessSubmit: null,
         belongToIDs: [],
         alreadyExistField: {
           name: false
         },
         tags: [],
-        code: 'const a = 10',
+        code: '',
+        codeMap: new Map(),
         doing: false,
         problem: {
           belong_to_id: null,
@@ -477,6 +633,7 @@
           {id: 1, name: '分组'},
           {id: 2, name: '比赛'},
         ],
+        results: ["Accepted","Juding","RuntimeError","CompileError","RunTimeOut","OOM","WrongAnswer","SystemError"],
         difficulties: [
           {id: 0, name: '简单'},
           {id: 1, name: '中等'},
@@ -493,6 +650,7 @@
           {name: 'Material', value: 'material'},
           {name: 'Solarized Dark', value: 'solarized dark'},
         ],
+        previousLanguage: {key: 3, name: 'Go', value: 'text/x-go'}, // init value should same as language
         language: {key: 3, name: 'Go', value: 'text/x-go'},
         languages: [
           {key: 0, name: 'C', value: 'text/x-csrc'},
@@ -598,7 +756,7 @@
         return new Promise((resolve, reject) => {
           this.doing = true
 
-          this.$axios({
+          const problemPromise = this.$axios({
             method: 'get',
             url: this.$gbl.apiURL + '/problems/problem/' + this.problemID,
             headers: AuthHeader(),
@@ -614,7 +772,6 @@
               }));
 
               console.log('get problem success')
-              resolve(response)
             })
             .catch(error => {
               this.doing = false
@@ -629,6 +786,79 @@
                 console.log(error.response)
               }
               this.$gbl.alert('danger', '获取试题出错')
+            })
+
+
+          const templatesPromise = this.$axios({
+            method: 'get',
+            url: this.$gbl.apiURL + '/templates',
+            params: {
+              page: 1,
+              page_size: 3000
+            }
+          })
+            .then(response => {
+              this.templates = response.data
+              this.codeMap = new Map(this.templates.map(temp => [temp.language, temp.template]))
+              this.code = this.codeMap.get(this.language.key)
+              console.log('get templates success')
+            })
+            .catch(error => {
+              // handle json response
+              let json = ExtractJson(error.response)
+              if (json) {
+                console.log(json)
+                this.$gbl.alert('danger', json.error.message)
+                return
+              } else {
+                console.log(error.response)
+              }
+              this.$gbl.alert('danger', '获取代码模板出错')
+            })
+
+          let lastSubmitPromise = this.getLastSubmit(false).then(response => {
+            this.lastSubmit = response.data
+            if (this.lastSubmit.result === 0) { // success
+              this.lastSuccessSubmit = response.data
+              this.lastSubmit = null
+            }else {
+              this.getLastSubmit(true).then(resp => {
+                this.lastSuccessSubmit = resp.data
+              })
+            }
+          })
+
+          Promise.all([problemPromise, templatesPromise,lastSubmitPromise]).then((response) => resolve(response)).catch(error => reject(error))
+        })
+      },
+      getLastSubmit(success) {
+        return new Promise((resolve,reject) => {
+          this.$axios({
+            method: 'get',
+            url: _.join([this.$gbl.apiURL, 'problems/problem', this.problemID, 'lastsubmit'], '/'),
+            headers: AuthHeader(),
+            params: {
+              success: success,
+            }
+          })
+            .then(response => {
+              resolve(response)
+            })
+            .catch(error => {
+              // handle json response
+              let json = ExtractJson(error.response)
+              if (json) {
+                switch (json.error.code) {
+                  case 40401:
+                    break
+                  default:
+                    console.log(json)
+                    this.$gbl.alert('danger', json.error.message)
+                }
+              } else {
+                console.log(error.response)
+                this.$gbl.alert('danger', '获取最近提交出错')
+              }
               reject(error)
             })
         })
@@ -978,8 +1208,108 @@
           this.pullData4Edit()
         }
       },
-      changeLang(val) {
-        this.cmOptions.mode = val.value
+      changeLang(newVal) {
+        this.cmOptions.mode = newVal.value
+        this.codeMap.set(this.previousLanguage.key, this.code)
+        this.previousLanguage = newVal
+        this.code = this.codeMap.get(newVal.key)
+      },
+      submit() {
+        if (this.isAdd) {
+          this.submitForm('problemForm', 'add')
+        } else if (this.isEdit) {
+          this.submitForm('problemForm', 'update')
+        } else {
+          this.submitAnswer()
+        }
+      },
+      reloadLastSubmit() {
+        this.getLastSubmit(false).then(response => {
+          this.lastSubmit = response.data
+          if (this.lastSubmit.result === 0) { // success
+            this.lastSuccessSubmit = response.data
+            this.lastSubmit = null
+          }else {
+            this.getLastSubmit(true).then(resp => {
+              this.lastSuccessSubmit = resp.data
+            })
+          }
+        })
+      },
+      submitAnswer() {
+        if (this.code === '') {
+          this.$gbl.alert('danger', '请输入你的答案')
+        }
+
+        this.$axios({
+          url: _.join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'submit'], '/'),
+          method: 'post',
+          headers: AuthHeader(),
+          data: {
+            source_code: this.code,
+            language: this.language.key,
+          }
+        }).then(() => {
+          this.judging = true
+          this.$gbl.alert('info', '提交成功，请等待判题')
+          this.pullResult()
+        }).catch(error => {
+          let json = ExtractJson(error.response)
+          if (json) {
+            this.$gbl.alert('danger', json.error.message)
+            console.log(json)
+          } else {
+            console.log(error)
+            this.$gbl.alert('danger', '提交出现错误')
+          }
+          this.reloadLastSubmit()
+        })
+      },
+      pullResult() {
+        let pulling = false
+        let i = setInterval(() => {
+          if (pulling) return
+          pulling = true
+
+          this.$axios({
+            url: _.join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'result'], '/'),
+            method: 'get',
+            headers: AuthHeader()
+          }).then(response => {
+            this.judgeResult = response.data
+            this.isError = this.judgeResult.status.code !== 0
+            this.showResult = true
+            this.judging = false
+            clearInterval(i)
+            this.reloadLastSubmit()
+          }).catch(error => {
+            pulling = false
+            let json = ExtractJson(error.response)
+            if (json) {
+              switch (json.error.code) {
+                case 40009: // judging
+                  console.log('judging have not complete')
+                  break
+                default:
+                  this.$gbl.alert('danger', json.error.message)
+                  this.judging = false
+                  console.log(json)
+              }
+            } else {
+              this.judging = false
+              console.log(error)
+            }
+          })
+        }, 2000)
+      },
+      loadSubmit(submit) {
+        if (submit.language !== this.language.key) {
+          this.cmOptions.mode = this.languages[submit.language].value
+          this.codeMap.set(this.previousLanguage.key, this.code)
+          this.previousLanguage = this.languages[submit.language]
+        }
+
+        this.code = submit.source_code
       }
     }
   }
@@ -1006,6 +1336,10 @@
     }
   }
 
+  .el-dialog__body {
+    padding: 1px 20px !important;
+  }
+
   .dark-content {
     .v-show-content {
       background: #27293d !important;
@@ -1013,6 +1347,18 @@
       pre {
         background: #1e1f2f
       }
+    }
+  }
+
+  .success-submit {
+    .card {
+      border-left: 5px solid #67c23a;
+    }
+  }
+
+  .fail-submit {
+    .card {
+      border-left: 5px solid #f56c6c;
     }
   }
 </style>
