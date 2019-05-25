@@ -252,6 +252,55 @@
                            v-model="problem.test_cases[index]"/>
             </card>
             <card v-if="!isAdd && !isEdit" body-classes="compact-card-body">
+              <div slot="header">
+                <div class="row pb-2 pt-2">
+                  <div class="col-6">
+                    <p style="display: inline">语言: </p>
+                    <el-select size="mini"
+                               v-model="language"
+                               @change="changeLang"
+                               filterable
+                               default-first-option
+                               placeholder="语言">
+                      <el-option
+                        v-for="item in languages"
+                        :key="item.key"
+                        :label="item.name"
+                        :value="item">
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <div class="col-6 text-right">
+                    <p style="display: inline;">主题: </p>
+                    <el-select size="mini"
+                               v-model="cmOptions.theme"
+                               filterable
+                               default-first-option
+                               placeholder="主题">
+                      <el-option
+                        v-for="item in themes"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+
+                    <p style="display:inline;" class="ml-2">KeyMap: </p>
+                    <el-select size="mini"
+                               v-model="cmOptions.keyMap"
+                               filterable
+                               default-first-option
+                               placeholder="KeyMap">
+                      <el-option
+                        v-for="item in keymaps"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </div>
+              </div>
               <codemirror v-model="code" :options="cmOptions"></codemirror>
             </card>
 
@@ -433,14 +482,33 @@
           {id: 1, name: '中等'},
           {id: 2, name: '难'},
         ],
+        keymaps: [
+          {name: 'Sublime', value: 'sublime'},
+          {name: 'Vim', value: 'vim'},
+          {name: 'Emacs', value: 'emacs'},
+          {name: 'Default', value: 'default'},
+        ],
+        themes: [
+          {name: 'Monokai', value: 'monokai'},
+          {name: 'Material', value: 'material'},
+          {name: 'Solarized Dark', value: 'solarized dark'},
+        ],
+        language: {key: 3, name: 'Go', value: 'text/x-go'},
+        languages: [
+          {key: 0, name: 'C', value: 'text/x-csrc'},
+          {key: 1, name: 'C++', value: 'text/x-c++src'},
+          {key: 2, name: 'Java', value: 'text/x-java'},
+          {key: 3, name: 'Go', value: 'text/x-go'},
+        ],
         cmOptions: {
           tabSize: 4,
           styleActiveLine: true,
           lineNumbers: true,
+          smartIndent: true,
           line: true,
           mode: 'text/x-go',
-          lineWrapping: true,
-          theme: 'material'
+          theme: 'material',
+          keyMap: 'default'
         }
       }
     },
@@ -663,10 +731,10 @@
         })
 
         // convert all string to tag struct
-        for (let i=0;i<this.problem.tags.length;i++) {
+        for (let i = 0; i < this.problem.tags.length; i++) {
           let tag = this.problem.tags[i]
-          if (typeof tag === 'string' ||tag instanceof String) {
-            this.problem.tags[i] = {name:tag}
+          if (typeof tag === 'string' || tag instanceof String) {
+            this.problem.tags[i] = {name: tag}
           }
         }
       },
@@ -774,7 +842,7 @@
         for (const val of submitProblem.tags) {
           if (this.previousTagMap.has(val.id)) {
             val.delete_it = false // already in tags
-            this.previousTagMap.set(val.id,val)
+            this.previousTagMap.set(val.id, val)
           }
         }
 
@@ -909,6 +977,9 @@
         if (this.isEdit && !this.alreadyPull4Edit) {
           this.pullData4Edit()
         }
+      },
+      changeLang(val) {
+        this.cmOptions.mode = val.value
       }
     }
   }

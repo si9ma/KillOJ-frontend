@@ -19,8 +19,20 @@ import 'mavon-editor/dist/css/index.css'
 
 import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
+
+// codemirror theme
 import 'codemirror/theme/material.css'
+import 'codemirror/theme/monokai.css'
+import 'codemirror/theme/solarized.css'
+
+// codemirror language
 import 'codemirror/mode/go/go.js'
+import 'codemirror/mode/clike/clike.js'
+
+// codemirror keymap
+import 'codemirror/keymap/emacs.js'
+import 'codemirror/keymap/vim.js'
+import 'codemirror/keymap/sublime.js'
 
 Vue.use(VueCodemirror)
 
