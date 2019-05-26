@@ -107,16 +107,6 @@
                             <el-input size="small" v-model="problem.source" placeholder="题目来源"/>
                           </el-form-item>
                         </div>
-                        <div class="col-md-2">
-                          <el-form-item prop="time_limit" label="时间限制(ms)">
-                            <el-input size="small" v-model.number="problem.time_limit" type="number" placeholder="时间限制(ms)"/>
-                          </el-form-item>
-                        </div>
-                        <div class="col-md-2">
-                          <el-form-item prop="memory_limit" label="内存限制(KB)">
-                            <el-input size="small" v-model.number="problem.memory_limit" type="number" placeholder="内存限制(KB）"/>
-                          </el-form-item>
-                        </div>
                       </div>
                     </div>
                     <div v-else>
@@ -148,6 +138,40 @@
                       </el-switch>
                     </div>
                   </div>
+                </div>
+              </div>
+            </card>
+
+            <!--            limit      -->
+            <card v-if="isAdd || isEdit">
+              <div v-if="index % 2 === 0" class="row" v-for="(limit,index) in problem.limit" :key="index">
+                <div class="col-3">
+                  <el-form-item
+                    :prop="'limit.' + index + '.time_limit'"
+                    :rules="problemRules.time_limit" :label="languages[index].name + '时间限制(ms)'">
+                    <el-input size="small" v-model.number="limit.time_limit" type="number" placeholder="时间限制(ms)"/>
+                  </el-form-item>
+                </div>
+                <div class="col-3">
+                  <el-form-item
+                    :prop="'limit.' + index + '.memory_limit'"
+                    :rules="problemRules.memory_limit" :label="languages[index].name + '内存限制(KB)'">
+                    <el-input size="small" v-model.number="limit.memory_limit" type="number" placeholder="内存限制(KB）"/>
+                  </el-form-item>
+                </div>
+                <div v-if="index + 1 < problem.limit.length" class="col-3">
+                  <el-form-item
+                    :prop="'limit.' + (index + 1) + '.time_limit'"
+                    :rules="problemRules.time_limit" :label="languages[index+1].name + '时间限制(ms)'">
+                    <el-input size="small" v-model.number="problem.limit[index+1].time_limit" type="number" placeholder="时间限制(ms)"/>
+                  </el-form-item>
+                </div>
+                <div v-if="index + 1 < problem.limit.length" class="col-3">
+                  <el-form-item
+                    :prop="'limit.' + (index + 1) + '.memory_limit'"
+                    :rules="problemRules.memory_limit" :label="languages[index+1].name + '内存限制(KB)'">
+                    <el-input size="small" v-model.number="problem.limit[index+1].memory_limit" type="number" placeholder="内存限制(KB）"/>
+                  </el-form-item>
                 </div>
               </div>
             </card>
@@ -515,6 +539,13 @@
         <el-button type="primary" size="mini" @click="showResult = false">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--    only when user has success submit    -->
+    <div class="row" v-if="this.lastSuccessSubmit">
+      <div class="col-10">
+        <comment :comments="problem.comments" :meID="mySelf.id" @submit="submitComment"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -522,13 +553,15 @@
   import {AuthHeader, Contains, ExtractJson} from "../service";
   import UserCard from './Profile/UserCard'
   import {SplitPanel} from "@/components";
+  import {Comment} from "@/components";
   import _ from "lodash";
 
   export default {
     name: "problem",
     components: {
       SplitPanel,
-      UserCard
+      UserCard,
+      Comment
     },
     props: {
       problemID: {
@@ -586,6 +619,12 @@
             id: null,
             name: ''
           },
+          limit: [
+            {time_limit: 100, memory_limit: 100}, // index 0 => c
+            {time_limit: 100, memory_limit: 100}, // index 1 => c++
+            {time_limit: 100, memory_limit: 100}, // index 2 => java
+            {time_limit: 100, memory_limit: 100}, // index 3 => go
+          ],
           catalog_id: null,
           comments: [],
           desc: '',
@@ -633,7 +672,7 @@
           {id: 1, name: '分组'},
           {id: 2, name: '比赛'},
         ],
-        results: ["Accepted","Juding","RuntimeError","CompileError","RunTimeOut","OOM","WrongAnswer","SystemError"],
+        results: ["Accepted", "Juding", "RuntimeError", "CompileError", "RunTimeOut", "OOM", "WrongAnswer", "SystemError"],
         difficulties: [
           {id: 0, name: '简单'},
           {id: 1, name: '中等'},
@@ -666,8 +705,37 @@
           line: true,
           mode: 'text/x-go',
           theme: 'material',
-          keyMap: 'default'
-        }
+          keyMap: 'vim'
+        },
+        commentData: [
+          {
+            id: 1,
+            date: '2018-07-05 08:30',
+            from: {
+              id: 1,
+              name: 'test',
+              avatar_url: 'https://avatars0.githubusercontent.com/u/24809310?s=400&u=a74f74fe94f1bc8b4eecf05f585573491b2417f1&v=4',
+            },
+            for_comment: 0,
+            content: 'test',
+          },
+          {
+            id: 2,
+            date: '2018-07-05 08:30',
+            from: {
+              id: 2,
+              name: 'test1',
+              avatar_url: 'https://avatars0.githubusercontent.com/u/24809310?s=400&u=a74f74fe94f1bc8b4eecf05f585573491b2417f1&v=4',
+            },
+            to: {
+              id: 1,
+              name: 'test',
+              avatar_url: 'https://avatars0.githubusercontent.com/u/24809310?s=400&u=a74f74fe94f1bc8b4eecf05f585573491b2417f1&v=4',
+            },
+            for_comment: 1,
+            content: 'test',
+          }
+        ],
       }
     },
     computed: {
@@ -765,6 +833,10 @@
               this.doing = false
               this.problem = response.data
 
+              // init limit value
+              this.problem.time_limit = this.problem.limit[this.language.key].time_limit
+              this.problem.memory_limit = this.problem.limit[this.language.key].memory_limit
+
               // backup tag
               this.previousTagMap = new Map(this.problem.tags.map(tag => {
                 tag.delete_it = true
@@ -783,9 +855,9 @@
                 this.$gbl.alert('danger', json.error.message)
                 return
               } else {
-                console.log(error.response)
+                console.log(error)
+                this.$gbl.alert('danger', '获取试题出错')
               }
-              this.$gbl.alert('danger', '获取试题出错')
             })
 
 
@@ -1213,6 +1285,10 @@
         this.codeMap.set(this.previousLanguage.key, this.code)
         this.previousLanguage = newVal
         this.code = this.codeMap.get(newVal.key)
+
+        // change limit value
+        this.problem.time_limit = this.problem.limit[newVal.key].time_limit
+        this.problem.memory_limit = this.problem.limit[newVal.key].memory_limit
       },
       submit() {
         if (this.isAdd) {
@@ -1307,9 +1383,34 @@
           this.cmOptions.mode = this.languages[submit.language].value
           this.codeMap.set(this.previousLanguage.key, this.code)
           this.previousLanguage = this.languages[submit.language]
+
+          // change limit value
+          this.problem.time_limit = this.problem.limit[submit.language].time_limit
+          this.problem.memory_limit = this.problem.limit[submit.language].memory_limit
         }
 
         this.code = submit.source_code
+      },
+      submitComment(val) {
+        this.$axios({
+          url: _.join([this.$gbl.apiURL,'problems/problem',this.problemID,'comment'],'/'),
+          method: 'post',
+          headers: AuthHeader(),
+          data: {
+            ...val
+          }
+        }).then(response => {
+          this.problem.comments.push(response.data)
+        }).catch(error => {
+          let json = ExtractJson(error.response)
+          if (json) {
+            this.$gbl.alert('danger',json.error.message)
+            console.log(json)
+          }else {
+            this.$gbl.alert('danger','评论出错')
+            console.log(error)
+          }
+        })
       }
     }
   }
