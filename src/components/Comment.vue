@@ -25,7 +25,7 @@
               <user-card :user="item.from"/>
             </div>
           </div>
-          <img slot="reference"  class="avatar" :src="item.from.avatar" width="36" height="36"/>
+          <img slot="reference" class="avatar" :src="item.from.avatar || '/img/anime3.png'" width="36" height="36"/>
         </el-popover>
         <div class="right">
           <div class="name">{{item.from.name}}</div>

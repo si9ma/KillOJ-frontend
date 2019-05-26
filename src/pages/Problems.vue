@@ -37,13 +37,10 @@
     </div>
     <div class="row">
       <div class="col-md-9">
-        <!--                  @header-click="noShowInfo"-->
-        <!--                  @row-click="showInfo"-->
         <el-table ref="problemTable"
                   :data="finalProblems"
                   @sort-change="resortProblems"
                   @filter-change="filterChange"
-                  @row-click="toProblem"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
                   style="width: 100%">
@@ -55,6 +52,11 @@
           <el-table-column prop="name"
                            label="名称"
                            sortable>
+            <template slot-scope="scope">
+              <el-link type="primary" :underline="false" @click="toProblem(scope.row)">
+                {{scope.row.name}}
+              </el-link>
+            </template>
           </el-table-column>
           <el-table-column prop="difficulty"
                            label="难度"

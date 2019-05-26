@@ -15,12 +15,14 @@ export default {
           this.getDocClasses().add('rtl');
           this.getDocClasses().add('menu-on-right');
           this.toggleBootstrapRTL(true);
+          this.$theme.changeRTL(true)
         },
         disableRTL() {
           this.isRTL = false;
           this.getDocClasses().remove('rtl');
           this.getDocClasses().remove('menu-on-right');
           this.toggleBootstrapRTL(false);
+          this.$theme.changeRTL(false)
         },
         toggleBootstrapRTL(value) {
           for (let i=0; i < document.styleSheets.length; i++){

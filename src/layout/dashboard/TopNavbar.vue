@@ -134,27 +134,35 @@
                 <a href="#"
                    class="nav-item dropdown-item">Settings</a>
               </li>
-              <li class="nav-link">
-                <a @click="$theme.changeTheme()"
-                   href="#"
-                   class="nav-item dropdown-item">{{$theme.isDark ? '白色主题' : '黑色主题'}}</a>
-              </li>
 
-              <div class="dropdown-divider"></div>
-              <li class="nav-link"
-                  v-for="(color,key) in sidebarColors"
-                  :key="key">
-                <a href="#"
-                   @click="$theme.changeSidebar(color.value)"
-                   class="nav-item dropdown-item">{{color.name}}侧边栏</a>
-              </li>
-
-              <div class="dropdown-divider"></div>
               <li class="nav-link">
                 <a href="#"
-                   @click="logout()"
-                   class="nav-item dropdown-item">Log out</a>
+                   class="nav-item dropdown-item">侧边栏
+                <el-select @change="$theme.changeSidebar(sidebarColor)" :class="sidebarColor" size="mini" v-model="sidebarColor">
+                  <el-option
+                    v-for="item in sidebarColors"
+                    :key="item.value"
+                    :label="item.name"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                </a>
               </li>
+
+              <li class="nav-link">
+                <a href="#"
+                   @click="$rtl.isRTL ? $rtl.disableRTL() : $rtl.enableRTL()"
+                   class="nav-item dropdown-item">切换页面方向</a>
+              </li>
+              <div v-if="user">
+
+                <div class="dropdown-divider"></div>
+                <li class="nav-link">
+                  <a href="#"
+                     @click="logout()"
+                     class="nav-item dropdown-item">Log out</a>
+                </li>
+              </div>
             </base-dropdown>
           </ul>
         </div>
@@ -182,7 +190,7 @@
         return this.$rtl.isRTL;
       },
       user() {
-        var user = this.$store.state.userInfo
+        let user = this.$store.state.userInfo
         if (!_.isEmpty(user)) {
           return user
         }
@@ -190,12 +198,16 @@
         return null
       }
     },
+    created() {
+      this.sidebarColor = this.$theme.sidebarBG
+    },
     data() {
       return {
         activeNotifications: false,
         showMenu: false,
         searchModalVisible: false,
         searchQuery: '',
+        sidebarColor: 'blue',
         sidebarColors: [
           {name: '蓝色', value: 'blue'},
           {name: '绿色', value: 'green'},
@@ -246,5 +258,42 @@
     }
   };
 </script>
-<style>
+<style lang="scss">
+  @import '@/assets/sass/black-dashboard/custom/_variables.scss';
+
+  .nav-link {
+    .el-input__inner {
+      border: none;
+      background: transparent;
+      padding: 0px;
+    }
+    
+    .vue {
+      .el-input__inner {
+        color: $vue-states;
+      }
+    }
+
+    .blue {
+      .el-input__inner {
+        color: $info-states;
+      }
+    }
+
+    .green {
+      .el-input__inner {
+        color: $success;
+      }
+    }
+
+    .purple {
+      .el-input__inner {
+        color: $purple;
+      }
+    }
+
+    .el-input__suffix {
+      display: none;
+    }
+  }
 </style>

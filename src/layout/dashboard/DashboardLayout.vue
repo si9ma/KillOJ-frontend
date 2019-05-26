@@ -3,14 +3,11 @@
     <side-bar title="KillOJ" :backgroundColor="$theme.sidebarBG">
       <template slot="links">
         <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
-        <sidebar-link to="/icons" :name="$t('sidebar.icons')" icon="tim-icons icon-atom"/>
         <sidebar-link to="/problems" name="题目" :fwicon="['fas','list']"/>
         <sidebar-link to="/groups" name="分组" :fwicon="['fas','users']"/>
         <sidebar-link to="/contests" name="比赛" :fwicon="['fas','trophy']"/>
-        <sidebar-link to="/notifications" :name="$t('sidebar.notifications')" icon="tim-icons icon-bell-55"/>
-        <sidebar-link to="/table-list" :name="$t('sidebar.tableList')" icon="tim-icons icon-puzzle-10"/>
-        <sidebar-link to="/typography" :name="$t('sidebar.typography')" icon="tim-icons icon-align-center"/>
-        <sidebar-link to="/dashboard?enableRTL=true" :name="$t('sidebar.rtlSupport')" icon="tim-icons icon-world"/>
+        <sidebar-link v-if="mySelf && mySelf.role === 0" to="/catalogs" name="分类" :fwicon="['fas','paw']"/>
+        <sidebar-link v-if="mySelf && mySelf.role === 0 || mySelf.role === 1" to="/users" name="用户" :fwicon="['fas','user']"/>
       </template>
     </side-bar>
     <div class="main-panel">
@@ -39,12 +36,17 @@
       DashboardContent,
       MobileMenu
     },
+    computed: {
+      mySelf() {
+        return this.$store.state.userInfo
+      }
+    },
     methods: {
       toggleSidebar() {
         if (this.$sidebar.showSidebar) {
           this.$sidebar.displaySidebar(false);
         }
-      }
+      },
     }
   };
 </script>

@@ -14,12 +14,11 @@
       </div>
     </div>
     <div class="row">
-      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
+      <div :class="{'col-md-8':sidebar,'col-md-12':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="groupTable"
                   :data="finalGroups"
                   @sort-change="resortGroups"
                   @header-click="noShowInfo"
-                  @row-click="showInfo"
                   @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
@@ -32,6 +31,11 @@
           <el-table-column prop="name"
                            label="名称"
                            sortable>
+            <template slot-scope="scope">
+              <el-link type="primary" :underline="false" @click="showInfo(scope.row)">
+                {{scope.row.name}}
+              </el-link>
+            </template>
           </el-table-column>
           <el-table-column prop="tags"
                            label="标签"
@@ -312,7 +316,7 @@
 
         this.resortGroups(this.sorter)
       },
-      showInfo(row, column, event) {
+      showInfo(row) {
         this.sidebar = true
         this.isAddGroup = false
         this.activeGroup = row
@@ -462,7 +466,7 @@
       getInviteInfo() {
         this.doing = true
         this.$axios({
-          url: _.join([this.$gbl.apiURL, '/groups/group', this.activeGroup.id, 'invite'], '/'),
+          url: _.join([this.$gbl.apiURL, 'groups/group', this.activeGroup.id, 'invite'], '/'),
           method: 'get',
           headers: AuthHeader(),
         })
@@ -525,9 +529,3 @@
     }
   }
 </script>
-
-<style>
-  .el-table--enable-row-hover .el-table__body tr:hover>td{
-    background-color: #f5f6fa !important;
-  }
-</style>

@@ -262,17 +262,17 @@
     mounted() {
       this.i18n = this.$i18n;
       if (this.enableRTL) {
-        this.i18n.locale = 'ar';
+        // this.i18n.locale = 'ar';
         this.$rtl.enableRTL();
       }
       this.initBigChart(0);
     },
-    beforeDestroy() {
-      if (this.$rtl.isRTL) {
-        this.i18n.locale = 'en';
-        this.$rtl.disableRTL();
-      }
-    }
+    // beforeDestroy() {
+    //   if (this.$rtl.isRTL) {
+    //     this.i18n.locale = 'en';
+    //     this.$rtl.disableRTL();
+    //   }
+    // }
   };
 </script>
 <style>

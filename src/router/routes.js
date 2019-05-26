@@ -16,6 +16,8 @@ const TableList = () =>
   import(/* webpackChunkName: "common" */ '@/pages/TableList.vue')
 const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
+const User = () => import(/* webpackChunkName: "common" */ '@/pages/User.vue')
+const Catalog = () => import(/* webpackChunkName: "common" */ '@/pages/Catalog.vue')
 const Contest = () => import(/* webpackChunkName: "common" */ '@/pages/Contest.vue')
 const Problems = () => import(/* webpackChunkName: "common" */ '@/pages/Problems.vue')
 const Problem = () => import(/* webpackChunkName: "common" */ '@/pages/Problem.vue')
@@ -109,6 +111,18 @@ const routes = [
         path: '/contests',
         name: 'contests',
         component: Contest,
+        beforeEnter: needLogin,
+      },
+      {
+        path: '/users',
+        name: 'users',
+        component: User,
+        beforeEnter: needLogin,
+      },
+      {
+        path: '/catalogs',
+        name: 'catalogs',
+        component: Catalog,
         beforeEnter: needLogin,
       },
       {

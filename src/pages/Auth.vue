@@ -83,7 +83,6 @@
           <div class="col-md-11 ml-auto mr-auto">
             <p class="text-center">{{isLogin ? '还没有账号?' : '已有账号?'}}
               <el-link type="primary"
-                       style="color:#409EFF"
                        @click="isLogin= !isLogin"
                        :underline="false"> {{ operation()[1] }}
               </el-link>

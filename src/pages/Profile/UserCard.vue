@@ -18,7 +18,9 @@
         <h5 class="title">{{user.name}}</h5>
       </a>
     </div>
-    <p></p>
+    <p v-if="user.organization" class="card-description text-center">
+      {{user.organization}}({{user.no_in_organization}})
+    </p>
     <p class="card-description text-center">
       {{user.signature || '这个人有点懒，什么都没留下'}}
     </p>
@@ -60,6 +62,8 @@ export default {
         { provider: 'github', icon: ['fab', 'github'], link: _.join(['https://github.com', this.user.github_name], '/'), show: this.user.github_name },
         { provider: 'zhihu', icon: ['fab', 'zhihu'], link: _.join(['https://www.zhihu.com/people', this.user.zhihu_name], '/'), show: this.user.zhihu_name },
         { provider: 'weibo', icon: ['fab', 'weibo'], link: _.join(['https://weibo.com', this.user.weibo_name], '/'), show: this.user.weibo_name },
+        { provider: 'email', icon: ['fas', 'envelope'], link: "mailto:" + this.user.email,show: this.user.email },
+        { provider: 'site', icon: ['fab', 'superpowers'], link: this.user.site,show: this.user.site },
       ]
     }
   }

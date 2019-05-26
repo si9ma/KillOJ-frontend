@@ -15,12 +15,11 @@
 
     <!--manage contests-->
     <div class="row">
-      <div :class="{'col-md-8':sidebar,'col-md-11':!sidebar,'ml-auto':true,'mr-auto':true}">
+      <div :class="{'col-md-8':sidebar,'col-md-12':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="contestTable"
                   :data="finalContests"
                   @sort-change="resortContests"
                   @header-click="noShowInfo"
-                  @row-click="showInfo"
                   @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
@@ -33,6 +32,11 @@
           <el-table-column prop="name"
                            label="名称"
                            sortable>
+            <template slot-scope="scope">
+              <el-link type="primary" :underline="false" @click="showInfo(scope.row)">
+                {{scope.row.name}}
+              </el-link>
+            </template>
           </el-table-column>
           <el-table-column prop="tags"
                            label="标签"
@@ -391,7 +395,7 @@
 
         this.resortContests(this.sorter)
       },
-      showInfo(row, column, event) {
+      showInfo(row) {
         this.sidebar = true
         this.isAddContest = false
         row.contestDate = [row.start_time, row.end_time]
@@ -520,7 +524,7 @@
       },
       invite2Contest() {
         this.$axios({
-          url: _.join([this.$gbl.apiURL, '/contests/contest', this.activeContest.id, 'invite'], '/'),
+          url: _.join([this.$gbl.apiURL, 'contests/contest', this.activeContest.id, 'invite'], '/'),
           method: 'post',
           headers: AuthHeader(),
           data: {
