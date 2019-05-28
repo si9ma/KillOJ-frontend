@@ -73,7 +73,7 @@
                            label="试题名称"
                            sortable>
             <template slot-scope="scope">
-              <el-link slot="reference" type="primary" :underline="false">
+              <el-link @click="$router.push('/problems/' + scope.row.problem.id)" slot="reference" type="primary" :underline="false">
                 {{scope.row.problem.name}}
               </el-link>
             </template>

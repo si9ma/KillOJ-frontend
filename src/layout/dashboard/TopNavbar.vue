@@ -114,14 +114,12 @@
 </template>
 <script>
   import {CollapseTransition} from 'vue2-transitions';
-  import Modal from '@/components/Modal';
   import _ from 'lodash'
   import {AuthHeader} from '@/service/auth'
 
   export default {
     components: {
       CollapseTransition,
-      Modal
     },
     computed: {
       routeName() {
