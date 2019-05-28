@@ -17,6 +17,7 @@
     <div class="row">
       <div :class="{'col-md-8':sidebar,'col-md-12':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="contestTable"
+                  size="mini"
                   :data="finalContests"
                   @sort-change="resortContests"
                   @row-click="showInfo"
@@ -248,7 +249,7 @@
         filteredContests: [],
         finalContests: [],
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 15,
         sorter: {
           column: {},
           order: 'ascending',

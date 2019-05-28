@@ -38,6 +38,7 @@
     <div class="row">
       <div class="col-md-9">
         <el-table ref="problemTable"
+                  size="mini"
                   :data="finalProblems"
                   @sort-change="resortProblems"
                   @filter-change="filterChange"
@@ -239,7 +240,7 @@
         currentPage: 1,
         groupsMap: new Map(),
         contestsMap: new Map(),
-        pageSize: 10,
+        pageSize: 15,
         queryString: '',
         difficultyFilter: [
           {text: '简单', value: 0},

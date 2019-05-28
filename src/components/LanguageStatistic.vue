@@ -1,5 +1,5 @@
 <template>
-  <v-chart :options="languageStatisticOpt" :autoresize="true"/>
+  <v-chart style="width: 100%" :options="languageStatisticOpt" :autoresize="true"/>
 </template>
 
 <script>
@@ -50,7 +50,7 @@
             {
               type: 'pie',
               selectedMode: 'single',
-              center: ['75%','50%'],
+              center: ['50%','50%'],
               radius: [0, '70%'],
 
               label: {

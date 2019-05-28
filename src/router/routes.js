@@ -24,6 +24,7 @@ const Problems = () => import(/* webpackChunkName: "common" */ '@/pages/Problems
 const Problem = () => import(/* webpackChunkName: "common" */ '@/pages/Problem.vue')
 const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGroup.vue')
 const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinContest.vue')
+const Submits = () => import(/* webpackChunkName: "common" */ '@/pages/Submits.vue')
 
 import _ from 'lodash'
 import Vue from 'vue'
@@ -58,26 +59,6 @@ const routes = [
         name: 'profile',
         component: Profile,
         beforeEnter: needLogin
-      },
-      {
-        path: 'notifications',
-        name: 'notifications',
-        component: Notifications
-      },
-      {
-        path: 'icons',
-        name: 'icons',
-        component: Icons
-      },
-      {
-        path: 'typography',
-        name: 'typography',
-        component: Typography
-      },
-      {
-        path: 'table-list',
-        name: 'table-list',
-        component: TableList
       },
       {
         path: '/user/:userid',
@@ -132,6 +113,12 @@ const routes = [
         path: '/users',
         name: 'users',
         component: User,
+        beforeEnter: needLogin,
+      },
+      {
+        path: '/submits',
+        name: 'submits',
+        component: Submits,
         beforeEnter: needLogin,
       },
       {

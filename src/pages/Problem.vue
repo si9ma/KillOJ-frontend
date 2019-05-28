@@ -337,7 +337,7 @@
           </el-button>
 
           <!--    only when user has success submit    -->
-          <div class="row" v-if="this.lastSuccessSubmit">
+          <div class="row" v-if="this.lastSuccessSubmit && !isEdit && !isAdd">
             <div class="col-12">
               <comment :comments="problem.comments" :meID="mySelf.id" @submit="submitComment"/>
             </div>
@@ -527,11 +527,9 @@
       </div>
     </div>
 
-    <el-dialog :visible.sync="showStatisticDetail" width="30%">
+    <el-dialog :visible.sync="showStatisticDetail" width="40%">
       <div class="row">
-        <div class="text-center">
           <submit-statistic :submits="submits"/>
-        </div>
       </div>
     </el-dialog>
 
@@ -789,6 +787,26 @@
               this.attitude = -1
               return
             }
+          }
+        }).then(() => {
+          let loadCodeFrom = this.$router.currentRoute.query.load_from
+          if (loadCodeFrom) {
+            this.$axios({
+              url: this.$gbl.apiURL + '/submits/' + loadCodeFrom,
+              headers: AuthHeader()
+            }).then(response => {
+              this.loadSubmit(response.data)
+              this.$gbl.alert('success','加载代码成功')
+            }).catch(error => {
+              let json = ExtractJson(error.response)
+              if (json) {
+                console.log(json)
+                this.$gbl.alert('danger',json.error.message)
+              } else {
+                console.log(error)
+                this.$gbl.alert('danger','加载代码出错')
+              }
+            })
           }
         })
       }

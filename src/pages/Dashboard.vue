@@ -140,8 +140,8 @@
         rankOption: {label:'All',value:'0:0'},
         rankOptions: [
           {label: 'All',items: [{label:'All',value:'0:0'}]},
-          {label: '比赛',items: []},
           {label: '分组',items: []},
+          {label: '比赛',items: []},
         ]
       }
     },

@@ -22,6 +22,7 @@
     <div class="row">
       <div :class="{'col-8':sidebar,'col-12':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="catalogTable"
+                  size="mini"
                   :data="finalCatalogs"
                   @sort-change="resortCatalogs"
                   @header-click="noShowInfo"
@@ -143,7 +144,7 @@
           name: false
         },
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 15,
         sorter: {
           column: {},
           order: 'ascending',

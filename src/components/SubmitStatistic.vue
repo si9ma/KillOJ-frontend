@@ -94,9 +94,9 @@
               color: '#999'
             }
           },
+          color: ['#56be6a', '#ea3e14','#80848f','#f09306','#ec600d','#749f83','#2f4554','#ea3e14','#c23531'],
           series: [
             {
-              color: ['#56be6a', '#ea3e14'],
               type: 'pie',
               center: ['50%','50%'],
               selectedMode: 'single',

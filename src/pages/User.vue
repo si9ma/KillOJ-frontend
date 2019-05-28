@@ -31,6 +31,7 @@
     <div class="row">
       <div :class="{'col-8':sidebar,'col-12':!sidebar,'ml-auto':true,'mr-auto':true}">
         <el-table ref="userTable"
+                  size="mini"
                   :data="finalUsers"
                   @sort-change="resortUsers"
                   @header-click="noShowInfo"
@@ -85,15 +86,6 @@
                        :total="users.length">
         </el-pagination>
       </div>
-
-      <div class="col-4" v-if="sidebar">
-        <card v-if="activeUser.role !== 0">
-          <h5 slot="header">操作</h5>
-          <el-button size="mini" type="primary" @click="updateMaintainer()">{{activeUser.role === 1 ? '取消该用户的维护权限' : '将该用户设置为维护人员'}}</el-button>
-        </card>
-        <!-- user info -->
-        <user-card v-if="activeUser" :user="activeUser" title="用户信息"></user-card>
-      </div>
     </div>
   </div>
 </template>
@@ -142,7 +134,7 @@
         finalUsers: [],
         queryString: '',
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 15,
         sorter: {
           column: {},
           order: 'ascending',
@@ -286,37 +278,6 @@
         this.$refs.userTable.clearFilter();
         this.filterChange({})
       },
-      updateMaintainer() {
-        let role = this.activeUser.role === 1 ? 2 : 1
-        this.$axios({
-          url: this.$gbl.apiURL + '/admin/maintainers/' + this.activeUser.id,
-          method: 'put',
-          headers: AuthHeader(),
-          data: {
-            role
-          }
-        }).then(() => {
-          let foundIndex = this.users.findIndex(x => x.id === this.activeUser.id);
-          this.users[foundIndex].role = role
-          if (role === 1) {
-            this.users[foundIndex].tags = [{name:'Maintainer'}]
-          }else {
-            this.users[foundIndex].tags = []
-          }
-
-          this.$gbl.alert('success','设置成功')
-          console.log('update maintainer success')
-        }).catch(error => {
-          let json = ExtractJson(error.response)
-          if (json) {
-            this.$gbl.alert('danger',json.error.message)
-            console.log(json)
-          }else {
-            this.$gbl.alert('danger','设置出错')
-            console.log(error)
-          }
-        })
-      }
     },
   }
 </script>

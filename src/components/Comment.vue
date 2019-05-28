@@ -5,6 +5,7 @@
                   @change="showCommentBtn = true"
                   defaultOpen="preview"
                   placeholder="写下你的评论"
+                  :autofocus="false"
                   :toolbars="$gbl.mdtoolbars"
                   style="z-index: auto"></mavon-editor>
 

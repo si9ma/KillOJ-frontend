@@ -14,6 +14,7 @@ import Comment from "./Comment";
 import SubmitStatistic from "./SubmitStatistic";
 import LanguageStatistic from "./LanguageStatistic";
 import SubmitRank from "./SubmitRank";
+import SubmitList from "./SubmitList";
 import ContributeBoard from "./ContributeBoard";
 
 import Card from "./Cards/Card.vue";
@@ -28,6 +29,7 @@ export {
   CloseButton,
   StatsCard,
   LanguageStatistic,
+  SubmitList,
   ContributeBoard,
   BaseTable,
   SubmitRank,
