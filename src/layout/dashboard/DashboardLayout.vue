@@ -2,7 +2,7 @@
   <div class="wrapper">
     <side-bar title="KillOJ" :backgroundColor="$theme.sidebarBG">
       <template slot="links">
-        <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
+        <sidebar-link to="/dashboard" name="Dashboard" :fwicon="['fas','chart-pie']"/>
         <sidebar-link to="/problems" name="题目" :fwicon="['fas','list']"/>
         <sidebar-link to="/groups" name="分组" :fwicon="['fas','users']"/>
         <sidebar-link to="/contests" name="比赛" :fwicon="['fas','trophy']"/>

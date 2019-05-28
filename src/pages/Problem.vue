@@ -335,6 +335,13 @@
                      @click="submit()">
             提 交
           </el-button>
+
+          <!--    only when user has success submit    -->
+          <div class="row" v-if="this.lastSuccessSubmit">
+            <div class="col-12">
+              <comment :comments="problem.comments" :meID="mySelf.id" @submit="submitComment"/>
+            </div>
+          </div>
         </div>
         <div class="col-md-2 mt-1" v-if="!isEdit && !isAdd">
           <card>
@@ -384,6 +391,23 @@
                     :key="index">
               {{tag.name}}
             </el-tag>
+          </card>
+
+          <card>
+            <div slot="header">
+              <div class="row">
+                <div class="col-6">
+                  <h5 style="display: inline">统计</h5>
+                  <font-awesome-icon size="sm" class="ml-1" :color="$theme.isDark ? 'white' : 'black'" :icon="['fas','chart-pie']"/>
+                </div>
+                <div class="col-6 text-right">
+                  <font-awesome-icon @click="showStatisticDetail = true" style="cursor: pointer;" size="sm" class="ml-1" :color="$theme.isDark ? 'white' : 'black'" :icon="['fas','info-circle']"/>
+                </div>
+              </div>
+            </div>
+            <div class="row text-center" id="problem-statistic">
+              <submit-statistic :submits="submits" :simple="true"/>
+            </div>
           </card>
 
           <!-- user info -->
@@ -503,6 +527,14 @@
       </div>
     </div>
 
+    <el-dialog :visible.sync="showStatisticDetail" width="30%">
+      <div class="row">
+        <div class="text-center">
+          <submit-statistic :submits="submits"/>
+        </div>
+      </div>
+    </el-dialog>
+
     <el-dialog :visible.sync="showResult" :width="isError ? '30%' : '20%'" center>
       <h4 slot="title" :style="{color: isError ? '#f56c6c' : '#67c23a' }">{{judgeResult.status && judgeResult.status.msg}}</h4>
       <div class="row">
@@ -539,26 +571,21 @@
         <el-button type="primary" size="mini" @click="showResult = false">确 定</el-button>
       </div>
     </el-dialog>
-
-    <!--    only when user has success submit    -->
-    <div class="row" v-if="this.lastSuccessSubmit">
-      <div class="col-10">
-        <comment :comments="problem.comments" :meID="mySelf.id" @submit="submitComment"/>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-  import {AuthHeader, Contains, ExtractJson} from "../service";
+  import {AuthHeader, Contains, ExtractJson, GetAllSubmit} from "../service";
   import UserCard from './Profile/UserCard'
   import {SplitPanel} from "@/components";
   import {Comment} from "@/components";
   import _ from "lodash";
+  import SubmitStatistic from "../components/SubmitStatistic";
 
   export default {
     name: "problem",
     components: {
+      SubmitStatistic,
       SplitPanel,
       UserCard,
       Comment
@@ -589,6 +616,7 @@
           right: '',
           show: true,
         },
+        submits: [],
         isSampleCollapse: true,
         isTestCaseCollapse: true,
         judging: false,
@@ -604,6 +632,7 @@
         groups: [],
         lastSubmit: null,
         lastSuccessSubmit: null,
+        showStatisticDetail: false,
         belongToIDs: [],
         alreadyExistField: {
           name: false
@@ -736,6 +765,7 @@
             content: 'test',
           }
         ],
+
       }
     },
     computed: {
@@ -887,6 +917,10 @@
               }
               this.$gbl.alert('danger', '获取代码模板出错')
             })
+
+          GetAllSubmit('problem',this.problemID,false).then(submits => {
+            this.submits = submits
+          })
 
           let lastSubmitPromise = this.getLastSubmit(false).then(response => {
             this.lastSubmit = response.data
@@ -1423,6 +1457,14 @@
 </style>
 
 <style lang="scss">
+  #problem-statistic {
+    .echarts {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+    }
+  }
+
   #problem-content {
     .markdown-body {
       min-height: 0;

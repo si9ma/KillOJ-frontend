@@ -131,9 +131,11 @@
                    class="nav-item dropdown-item">{{user ? user.name : '登录'}}</a>
               </li>
               <li class="nav-link">
-                <a href="#"
-                   class="nav-item dropdown-item">Settings</a>
+                <a @click="$theme.changeTheme()"
+                   href="#"
+                   class="nav-item dropdown-item">{{$theme.isDark ? '白色主题' : '黑色主题'}}</a>
               </li>
+
 
               <li class="nav-link">
                 <a href="#"

@@ -7,119 +7,102 @@
           <template slot="header">
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-                <h2 class="card-title">{{$t('dashboard.performance')}}</h2>
+                <h5 class="card-category">排行</h5>
+                <h5 v-if="rankBy === 'all'" class="card-title">总排行</h5>
+                <h5 v-else class="card-title">{{rankOption.label}}
+                  <font-awesome-icon size="sm"
+                                     :color="$theme.isDark ? 'white' : 'black'"
+                                     :icon="rankBy === 'group' ? ['fas','users'] : ['fas','trophy']"/>
+                </h5>
+              </div>
+              <div class="col-sm-6 text-right">
+                <el-select @change="changeRankOption" size="mini" v-model="rankOption" placeholder="请选择排行维度">
+                  <el-option-group
+                    v-for="option in rankOptions"
+                    v-if="option.items.length !== 0"
+                    :key="option.label"
+                    :label="option.label">
+                    <el-option
+                      v-for="item in option.items"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item">
+                    </el-option>
+                  </el-option-group>
+                </el-select>
+              </div>
+            </div>
+          </template>
+
+          <div>
+            <submit-rank style="max-height: 400px" :top="15" :submits="rankSubmits"/>
+          </div>
+        </card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 ml-auto mr-auto mb-1 mt-1">
+        <contribute-board :submits="contributeSubmits"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6" :class="{'text-right': isRTL}">
+        <card type="chart">
+          <template slot="header">
+            <div class="row">
+              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+                <h5 class="card-category">提交统计</h5>
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{statisticSubmits.length}}</h3>
               </div>
               <div class="col-sm-6">
                 <div class="btn-group btn-group-toggle"
-                    :class="isRTL ? 'float-left' : 'float-right'"
-                    data-toggle="buttons">
-                  <label v-for="(option, index) in bigLineChartCategories"
-                        :key="option"
-                        class="btn btn-sm btn-primary btn-simple"
-                        :class="{active: bigLineChart.activeIndex === index}"
-                        :id="index">
+                     :class="isRTL ? 'float-left' : 'float-right'"
+                     data-toggle="buttons">
+                  <label v-for="option in ['Me','All']"
+                         :key="option"
+                         class="btn btn-sm btn-primary btn-simple"
+                         :class="{active: currentSubmitStatistic === option}">
                     <input type="radio"
-                          @click="initBigChart(index)"
-                          name="options" autocomplete="off"
-                          :checked="bigLineChart.activeIndex === index">
+                           @click="changeSubmits(option)"
+                           name="options" autocomplete="off"
+                           :checked="currentSubmitStatistic === option">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
           </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        ref="bigChart"
-                        chart-id="big-line-chart"
-                        :chart-data="bigLineChart.chartData"
-                        :gradient-colors="bigLineChart.gradientColors"
-                        :gradient-stops="bigLineChart.gradientStops"
-                        :extra-options="bigLineChart.extraOptions">
-            </line-chart>
-          </div>
+          <submit-statistic :submits="statisticSubmits"/>
         </card>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
+      <div class="col-lg-6" :class="{'text-right': isRTL}">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
+            <div class="row">
+              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+                <h5 class="card-category">语言统计</h5>
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{languageCnt}}</h3>
+              </div>
+              <div class="col-sm-6">
+                <div class="btn-group btn-group-toggle"
+                     :class="isRTL ? 'float-left' : 'float-right'"
+                     data-toggle="buttons">
+                  <label v-for="option in ['Me','All']"
+                         :key="option"
+                         class="btn btn-sm btn-primary btn-simple"
+                         :class="{active: currentLanguageStatistic === option}">
+                    <input type="radio"
+                           @click="changeLanguageSubmits(option)"
+                           name="options" autocomplete="off"
+                           :checked="currentLanguageStatistic === option">
+                    {{option}}
+                  </label>
+                </div>
+              </div>
+            </div>
           </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="purple-line-chart"
-                        :chart-data="purpleLineChart.chartData"
-                        :gradient-colors="purpleLineChart.gradientColors"
-                        :gradient-stops="purpleLineChart.gradientStops"
-                        :extra-options="purpleLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.dailySales')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500€</h3>
-          </template>
-          <div class="chart-area">
-            <bar-chart style="height: 100%"
-                      chart-id="blue-bar-chart"
-                      :chart-data="blueBarChart.chartData"
-                      :gradient-stops="blueBarChart.gradientStops"
-                      :extra-options="blueBarChart.extraOptions">
-            </bar-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.completedTasks')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100K</h3>
-          </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="green-line-chart"
-                        :chart-data="greenLineChart.chartData"
-                        :gradient-stops="greenLineChart.gradientStops"
-                        :extra-options="greenLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <card type="tasks" :header-classes="{'text-right': isRTL}">
-          <template slot="header">
-            <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
-            <p class="card-category d-inline">{{$t('dashboard.today')}}</p>
-            <base-dropdown menu-on-right=""
-                          tag="div"
-                          title-classes="btn btn-link btn-icon"
-                          aria-label="Settings menu"
-                          :class="{'float-left': isRTL}">
-              <i slot="title" class="tim-icons icon-settings-gear-63"></i>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.action')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.anotherAction')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.somethingElse')}}</a>
-            </base-dropdown>
-          </template>
-          <div class="table-full-width table-responsive">
-            <task-list></task-list>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <card class="card" :header-classes="{'text-right': isRTL}">
-          <h4 slot="header" class="card-title">{{$t('dashboard.simpleTable')}}</h4>
-          <div class="table-responsive">
-            <user-table></user-table>
+          <div>
+            <language-statistic :submits="languageStatisticSubmits"/>
           </div>
         </card>
       </div>
@@ -127,101 +110,61 @@
   </div>
 </template>
 <script>
-  import LineChart from '@/components/Charts/LineChart';
-  import BarChart from '@/components/Charts/BarChart';
-  import * as chartConfigs from '@/components/Charts/config';
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
-  import config from '@/config';
+  import {GetAllContests, GetAllGroups, GetAllSubmit} from "../service";
+  import SubmitStatistic from "../components/SubmitStatistic";
+  import SubmitRank from "../components/SubmitRank";
+  import LanguageStatistic from "../components/LanguageStatistic";
+  import ContributeBoard from "../components/ContributeBoard";
 
   export default {
     components: {
-      LineChart,
-      BarChart,
+      ContributeBoard,
+      LanguageStatistic,
+      SubmitRank,
+      SubmitStatistic,
       TaskList,
       UserTable
     },
     data() {
       return {
-        bigLineChart: {
-          allData: [
-            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-            [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-            [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
-          ],
-          activeIndex: 0,
-          chartData: null,
-          extraOptions: chartConfigs.purpleChartOptions,
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-          categories: []
-        },
-        purpleLineChart: {
-          extraOptions: chartConfigs.purpleChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-            datasets: [{
-              label: "Data",
-              fill: true,
-              borderColor: config.colors.primary,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.primary,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.2, 0],
-        },
-        greenLineChart: {
-          extraOptions: chartConfigs.greenChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
-            datasets: [{
-              label: "My First dataset",
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            }]
-          },
-          gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-          gradientStops: [1, 0.4, 0],
-        },
-        blueBarChart: {
-          extraOptions: chartConfigs.barChartOptions,
-          chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
-            datasets: [{
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-        }
+        statisticSubmits: [],
+        contributeSubmits: [],
+        languageStatisticSubmits: [],
+        languageCnt: 0,
+        rankSubmits: [],
+        rankBy: 'all',
+        currentSubmitStatistic: 'Me',
+        currentLanguageStatistic: 'Me',
+        rankOption: {label:'All',value:'0:0'},
+        rankOptions: [
+          {label: 'All',items: [{label:'All',value:'0:0'}]},
+          {label: '比赛',items: []},
+          {label: '分组',items: []},
+        ]
       }
+    },
+    created() {
+      GetAllGroups().then(groups => {
+        this.rankOptions[1].items = groups.map(i => {
+          return {label: i.name, value: '1:' + i.id}
+        })
+      })
+
+      GetAllContests().then(contests => {
+        this.rankOptions[2].items = contests.map(i => {
+          return {label: i.name, value: '2:' + i.id}
+        })
+      })
+
+      GetAllSubmit('',1,false).then(submits => {
+        this.contributeSubmits = submits
+      })
+
+      this.changeRankOption()
+      this.changeLanguageSubmits(this.currentLanguageStatistic)
+      this.changeSubmits(this.currentSubmitStatistic)
     },
     computed: {
       enableRTL() {
@@ -230,49 +173,73 @@
       isRTL() {
         return this.$rtl.isRTL;
       },
-      bigLineChartCategories() {
-        return this.$t('dashboard.chartCategories');
+    },
+    watch: {
+      languageStatisticSubmits() {
+        let resultMap = new Map()
+        this.languageStatisticSubmits.forEach(el => {
+          resultMap.set(el.language,1)
+        })
+
+        this.languageCnt = resultMap.size
       }
     },
     methods: {
-      initBigChart(index) {
-        let chartData = {
-          datasets: [{
-            fill: true,
-            borderColor: config.colors.primary,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.primary,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.primary,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: this.bigLineChart.allData[index]
-          }],
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+      changeRankOption() {
+        let option = this.rankOption.value.split(':')
+        let of = ''
+        let id = 1
+
+        switch (option[0]) {
+          case '0':
+            this.rankBy = 'all'
+            break
+          case '1':
+            this.rankBy = 'group'
+            of = 'group'
+            id = Number(option[1])
+            break
+          case '2':
+            this.rankBy = 'contest'
+            of = 'contest'
+            id = Number(option[1])
         }
-        this.$refs.bigChart.updateGradients(chartData);
-        this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;
-      }
+
+        GetAllSubmit(of,id,true).then(submits => {
+          this.rankSubmits = submits
+        })
+      },
+      changeSubmits(option) {
+        switch (option) {
+          case 'Me':
+            this.currentSubmitStatistic = 'Me'
+            GetAllSubmit('me',1,false).then(submits => {
+              this.statisticSubmits = submits
+            })
+            break
+          case 'All':
+            this.currentSubmitStatistic = 'All'
+            GetAllSubmit('',0,false).then(submits => {
+              this.statisticSubmits = submits
+            })
+        }
+      },
+      changeLanguageSubmits(option) {
+        switch (option) {
+          case 'Me':
+            this.currentLanguageStatistic = 'Me'
+            GetAllSubmit('me',1,false).then(submits => {
+              this.languageStatisticSubmits = submits
+            })
+            break
+          case 'All':
+            this.currentLanguageStatistic = 'All'
+            GetAllSubmit('',0,false).then(submits => {
+              this.languageStatisticSubmits = submits
+            })
+        }
+      },
     },
-    mounted() {
-      this.i18n = this.$i18n;
-      if (this.enableRTL) {
-        // this.i18n.locale = 'ar';
-        this.$rtl.enableRTL();
-      }
-      this.initBigChart(0);
-    },
-    // beforeDestroy() {
-    //   if (this.$rtl.isRTL) {
-    //     this.i18n.locale = 'en';
-    //     this.$rtl.disableRTL();
-    //   }
-    // }
   };
 </script>
 <style>

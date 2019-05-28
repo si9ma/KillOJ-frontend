@@ -15,6 +15,7 @@ const Typography = () =>
 const TableList = () =>
   import(/* webpackChunkName: "common" */ '@/pages/TableList.vue')
 const Auth = () => import(/* webpackChunkName: "common" */ '@/pages/Auth.vue')
+const UserDetail = () => import(/* webpackChunkName: "common" */ '@/pages/UserDetail.vue')
 const Group = () => import(/* webpackChunkName: "common" */ '@/pages/Group.vue')
 const User = () => import(/* webpackChunkName: "common" */ '@/pages/User.vue')
 const Catalog = () => import(/* webpackChunkName: "common" */ '@/pages/Catalog.vue')
@@ -49,7 +50,8 @@ const routes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        beforeEnter: needLogin,
       },
       {
         path: 'profile',
@@ -76,6 +78,19 @@ const routes = [
         path: 'table-list',
         name: 'table-list',
         component: TableList
+      },
+      {
+        path: '/user/:userid',
+        name: 'user Info',
+        component: UserDetail,
+        beforeEnter: needLogin,
+        props: (route) => {
+          const userid = Number.parseInt(route.params.userid, 10)
+          if (Number.isNaN(userid)) {
+            return 0
+          }
+          return { userid }
+        }
       },
       {
         path: '/login',

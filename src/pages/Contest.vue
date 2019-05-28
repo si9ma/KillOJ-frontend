@@ -19,6 +19,7 @@
         <el-table ref="contestTable"
                   :data="finalContests"
                   @sort-change="resortContests"
+                  @row-click="showInfo"
                   @header-click="noShowInfo"
                   @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
@@ -33,7 +34,7 @@
                            label="名称"
                            sortable>
             <template slot-scope="scope">
-              <el-link type="primary" :underline="false" @click="showInfo(scope.row)">
+              <el-link type="primary" :underline="false" @click="toProblems(scope.row)">
                 {{scope.row.name}}
               </el-link>
             </template>
@@ -183,6 +184,7 @@
   import {AuthHeader} from '../service/auth'
   import {AfterDays, ExtractJson} from '../service/util'
   import {Contains} from '../service/util'
+  import {GetAllContests, GetAllGroups} from "../service";
 
   // for sort by id
   function contestCompareByID(order) {
@@ -303,76 +305,28 @@
       }
     },
     created() {
-      this.doing = true
-
       // get all my contests
-      this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/contests',
-        headers: AuthHeader(),
-        params: {
-          page: 1,
-          page_size: 3000
-        }
-      })
-        .then(response => {
-          this.contests = response.data
+      GetAllContests().then(contests => {
+        this.contests = contests
 
-          // add tag to each contest
-          this.contests.forEach(el => {
-            if (el.owner.id === this.mySelf.id) {
-              el.tags = [{name: 'Owner'}]
-            } else {
-              el.tags = []
-            }
-          })
-
-          this.filterContests()
-          console.log('get contests success')
-        })
-        .catch(error => {
-
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
+        // add tag to each contest
+        this.contests.forEach(el => {
+          if (el.owner.id === this.mySelf.id) {
+            el.tags = [{name: 'Owner'}]
           } else {
-            console.log(error.response)
+            el.tags = []
           }
-          this.$gbl.alert('danger', '获取比赛出错')
         })
+
+        this.filterContests()
+        console.log('get contests success')
+      })
 
       // get all my groups
-      this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/groups',
-        headers: AuthHeader(),
-        params: {
-          page: 1,
-          page_size: 3000
-        }
+      GetAllGroups().then(groups => {
+        this.groups = groups
+        console.log('get groups success')
       })
-        .then(response => {
-          this.groups = response.data
-          console.log('get groups success')
-          this.doing = false
-        })
-        .catch(error => {
-          this.doing = false
-
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
-          } else {
-            console.log(error.response)
-            this.$gbl.alert('danger', '获取分组出错')
-          }
-        })
     },
     methods: {
       filterChange(filter) {
@@ -393,6 +347,7 @@
           })
         }
 
+        this.currentPage = 1 // change current page to first page when resort
         this.resortContests(this.sorter)
       },
       showInfo(row) {
@@ -616,6 +571,14 @@
         let from = (this.currentPage - 1) * this.pageSize
         let to = this.currentPage * this.pageSize
         this.finalContests = this.sortedContests.slice(from, to)
+      },
+      toProblems(row) {
+        let filter = {}
+        filter['belong_to'] = [{belong_type: 2,belong_to_id: row.id}]
+        let query = {
+          filter: JSON.stringify(filter)
+        }
+        this.$router.push({path: '/problems', query: query})
       }
     }
   }

@@ -58,6 +58,16 @@
               </el-link>
             </template>
           </el-table-column>
+          <el-table-column prop="belongTo"
+                           label="属于"
+                           column-key="belongTo">
+            <template slot-scope="scope">
+              <el-tag style="cursor: pointer" @click="filterChange(getBelongToChange(scope.row))" size="small" class="ml-1 mr-1">
+                <font-awesome-icon v-if="getBelongToIcon(scope.row)" :icon="getBelongToIcon(scope.row)" size="sm"/>
+                {{getBelongToText(scope.row)}}
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="difficulty"
                            label="难度"
                            column-key="difficulty"
@@ -137,6 +147,34 @@
             {{tag.name}}
           </el-tag>
         </card>
+
+        <card>
+          <div slot="header">
+            <font-awesome-icon :icon="['fas','users']"
+                               size="sm"/>
+            <span class="ml-2">分组</span>
+          </div>
+
+          <el-tag style="cursor: pointer" @click="filterChange({belong_to:[{belong_type: 1,belong_to_id: group.id}]})"
+                  class="ml-1 mr-1 mt-1 mb-1" size="small" v-for="(group,index) in groups"
+                  :key="index">
+            {{group.name}}
+          </el-tag>
+        </card>
+
+        <card>
+          <div slot="header">
+            <font-awesome-icon :icon="['fas','trophy']"
+                               size="sm"/>
+            <span class="ml-2">比赛</span>
+          </div>
+
+          <el-tag style="cursor: pointer" @click="filterChange({belong_to:[{belong_type: 2,belong_to_id: contest.id}]})"
+                  class="ml-1 mr-1 mt-1 mb-1" size="small" v-for="(contest,index) in contests"
+                  :key="index">
+            {{contest.name}}
+          </el-tag>
+        </card>
       </div>
     </div>
   </div>
@@ -146,6 +184,7 @@
   import {AuthHeader} from '../service/auth'
   import {ExtractJson} from '../service/util'
   import {Contains} from '../service/util'
+  import {GetAllCatalogs, GetAllContests, GetAllGroups, GetAllProblems, GetAllTags} from "../service";
 
   // for sort by id
   function problemCompareByID(order) {
@@ -175,7 +214,7 @@
 
   export default {
     name: 'Problem',
-    data: function () {
+    data() {
       let validateName = (rule, value, callback) => {
         // name shouldn't contains special character
         if (Contains(value, '!@#?')) {
@@ -191,11 +230,15 @@
         problems: [],
         tags: [],
         catalogs: [],
+        groups: [],
+        contests: [],
         searchedProblems: [],
         filteredProblems: [],
         sortedProblems: [],
         finalProblems: [],
         currentPage: 1,
+        groupsMap: new Map(),
+        contestsMap: new Map(),
         pageSize: 10,
         queryString: '',
         difficultyFilter: [
@@ -246,18 +289,19 @@
         console.log(this.filter)
       }
 
-      this.doing = true
-      const problemsPromise = this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/problems',
-        headers: AuthHeader(),
-        params: {
-          page: 1,
-          page_size: 3000
-        }
-      })
-        .then(response => {
-          this.problems = response.data
+      GetAllGroups().then(groups => {
+        this.groups = groups
+        this.groupsMap = new Map(this.groups.map(i => [i.id,i]))
+        console.log('get groups success')
+      }).then(() => {
+        GetAllContests().then(contests => {
+          this.contests = contests
+          this.contestsMap = new Map(this.contests.map(i => [i.id, i]))
+          console.log('get contests success')
+        })
+      }).then(() => {
+        GetAllProblems().then(problems => {
+          this.problems = problems
 
           this.problems.forEach(el => {
             if (el.owner_id === this.mySelf.id) {
@@ -268,70 +312,17 @@
           this.filterProblems()
           console.log('get problems success')
         })
-        .catch(error => {
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
-          } else {
-            console.log(error)
-            this.$gbl.alert('danger', '获取试题出错')
-          }
-        })
-
-      const tagsPromise = this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/tags',
-        params: {
-          page: 1,
-          page_size: 3000
-        }
       })
-        .then(response => {
-          this.tags = response.data
-          console.log('get tags success')
-        })
-        .catch(error => {
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
-          } else {
-            console.log(error.response)
-          }
-          this.$gbl.alert('danger', '获取tag出错')
-        })
 
-      const catalogsPromise = this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/catalogs',
-        params: {
-          page: 1,
-          page_size: 3000
-        }
+      GetAllTags().then(tags => {
+        this.tags = tags
+        console.log('get tags success')
       })
-        .then(response => {
-          this.catalogs = response.data
-          console.log('get catalogs success')
-        })
-        .catch(error => {
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
-          } else {
-            console.log(error.response)
-          }
-          this.$gbl.alert('danger', '获取分类出错')
-        })
 
-      Promise.all([problemsPromise, tagsPromise, catalogsPromise]).then(() => this.doing = false).catch(() => this.doing = false)
+      GetAllCatalogs().then(catalogs => {
+        this.catalogs = catalogs
+        console.log('get catalogs success')
+      })
     },
     methods: {
       filterChange(filter) {
@@ -345,6 +336,13 @@
                   return problem[key].some(el => filter[key].includes(el.id)) // we should check id field of tag
                 case 'catalog':
                   return filter[key].includes(problem.catalog.id) // we should check id field of catalog
+                case 'belong_to':
+                  for (let st of filter[key]) {
+                    if (st.belong_type === problem.belong_type && st.belong_to_id === problem.belong_to_id) {
+                      return true
+                    }
+                  }
+                  return false
                 default:
                   return filter[key].includes(problem.difficulty)
               }
@@ -381,6 +379,7 @@
             this.sortedProblems.sort(byName)
             break
         }
+        this.currentPage = 1 // change current page to first page when resort
         this.filterProblems()
       },
       filterProblems() {
@@ -401,6 +400,25 @@
       },
       toProblem(row) {
         this.$router.push('/problems/' + row.id)
+      },
+      getBelongToIcon(row) {
+        if (row.belong_type === 1) {
+          return ['fas','users']
+        } else if (row.belong_type === 2) {
+          return ['fas','trophy']
+        }
+
+        return null
+      },
+      getBelongToText(row) {
+        let belong_type = row.belong_type
+        let belong_id = row.belong_to_id
+        return belong_type === 0 ? 'Public' : (belong_type === 1 ? this.groupsMap.get(belong_id).name : this.contestsMap.get(belong_id).name)
+      },
+      getBelongToChange(row) {
+        let belong_type = row.belong_type
+        let belong_id = row.belong_to_id
+        return {belong_to:[{belong_type:belong_type,belong_to_id:belong_id}]}
       }
     }
   }

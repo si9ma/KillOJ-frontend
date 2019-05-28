@@ -19,6 +19,7 @@
                   :data="finalGroups"
                   @sort-change="resortGroups"
                   @header-click="noShowInfo"
+                  @row-click="showInfo"
                   @filter-change="filterChange"
                   :header-cell-style="$theme.tableTheme"
                   :cell-style="$theme.tableTheme"
@@ -32,7 +33,7 @@
                            label="名称"
                            sortable>
             <template slot-scope="scope">
-              <el-link type="primary" :underline="false" @click="showInfo(scope.row)">
+              <el-link type="primary" :underline="false" @click="toProblems(scope.row)">
                 {{scope.row.name}}
               </el-link>
             </template>
@@ -155,6 +156,7 @@
   import {AuthHeader} from '../service/auth'
   import {ExtractJson} from '../service/util'
   import {Contains} from '../service/util'
+  import {GetAllGroups} from "../service";
 
   // for sort by id
   function groupCompareByID(order) {
@@ -255,45 +257,23 @@
     },
     created() {
       this.doing = true
-      this.$axios({
-        method: 'get',
-        url: this.$gbl.apiURL + '/groups',
-        headers: AuthHeader(),
-        params: {
-          page: 1,
-          page_size: 3000
-        }
-      })
-        .then(response => {
-          this.groups = response.data
+      GetAllGroups().then(groups => {
+        this.groups = groups
 
-          // add tag to each group
-          this.groups.forEach(el => {
-            if (el.owner.id === this.mySelf.id) {
-              el.tags = [{name: 'Owner'}]
-            } else {
-              el.tags = []
-            }
-          })
-
-          this.filterGroups()
-          console.log('get groups success')
-          this.doing = false
-        })
-        .catch(error => {
-          this.doing = false
-
-          // handle json response
-          let json = ExtractJson(error.response)
-          if (json) {
-            console.log(json)
-            this.$gbl.alert('danger', json.error.message)
-            return
+        // add tag to each group
+        this.groups.forEach(el => {
+          if (el.owner.id === this.mySelf.id) {
+            el.tags = [{name: 'Owner'}]
           } else {
-            console.log(error.response)
+            el.tags = []
           }
-          this.$gbl.alert('danger', '获取分组出错')
         })
+
+        this.filterGroups()
+        console.log('get groups success')
+      }).finally(() => {
+        this.doing = false
+      })
     },
     methods: {
       filterChange(filter) {
@@ -314,6 +294,7 @@
           })
         }
 
+        this.currentPage = 1 // change current page to first page when resort
         this.resortGroups(this.sorter)
       },
       showInfo(row) {
@@ -525,6 +506,14 @@
         let from = (this.currentPage - 1) * this.pageSize
         let to = this.currentPage * this.pageSize
         this.finalGroups = this.sortedGroups.slice(from, to)
+      },
+      toProblems(row) {
+        let filter = {}
+        filter['belong_to'] = [{belong_type: 1,belong_to_id: row.id}]
+        let query = {
+          filter: JSON.stringify(filter)
+        }
+        this.$router.push({path: '/problems', query: query})
       }
     }
   }

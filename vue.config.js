@@ -4,6 +4,10 @@ module.exports = {
   configureWebpack: {
     devtool: 'source-map'
   },
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ],
   lintOnSave: false,
   configureWebpack: {
     // Set up all the aliases we use in our app.

@@ -33,6 +33,16 @@ import 'codemirror/mode/clike/clike.js'
 import 'codemirror/keymap/emacs.js'
 import 'codemirror/keymap/vim.js'
 import 'codemirror/keymap/sublime.js'
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/toolbox'
+import 'echarts/lib/component/tooltip'
+import { CalendarHeatmap } from 'vue-calendar-heatmap'
+
+Vue.component('calendarHeatmap', CalendarHeatmap)
 
 Vue.use(VueCodemirror)
 
@@ -42,6 +52,7 @@ Vue.use(mavonEditor)
 Vue.use(VueClipboard)
 library.add(fas,fab)
 
+Vue.component('v-chart', ECharts)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(ElementUI);

@@ -11,7 +11,7 @@
       <div class="block block-two"></div>
       <div class="block block-three"></div>
       <div class="block block-four"></div>
-      <a href="#">
+      <a href="#" @click="$router.push('/user/' + user.id)">
         <img class="avatar"
             :src="user.avatar ? user.avatar : '/img/anime3.png'"
             alt="...">

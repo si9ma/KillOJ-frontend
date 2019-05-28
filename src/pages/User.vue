@@ -235,6 +235,7 @@
           })
         }
 
+        this.currentPage = 1 // change current page to first page when resort
         this.resortUsers(this.sorter)
       },
       showInfo(row) {
