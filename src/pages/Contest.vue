@@ -62,7 +62,7 @@
                        @current-change="handleCurrentChange"
                        :current-page="currentPage"
                        :page-sizes="[5, 10, 15, 20,25,30,35,40]"
-                       :page-size="10"
+                       :page-size="15"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="contests.length">
         </el-pagination>
