@@ -110,8 +110,6 @@
   </div>
 </template>
 <script>
-  import TaskList from './Dashboard/TaskList';
-  import UserTable from './Dashboard/UserTable';
   import {GetAllContests, GetAllGroups, GetAllSubmit} from "../service";
   import SubmitStatistic from "../components/SubmitStatistic";
   import SubmitRank from "../components/SubmitRank";
@@ -124,8 +122,6 @@
       LanguageStatistic,
       SubmitRank,
       SubmitStatistic,
-      TaskList,
-      UserTable
     },
     data() {
       return {

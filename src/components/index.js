@@ -18,7 +18,6 @@ import SubmitList from "./SubmitList";
 import ContributeBoard from "./ContributeBoard";
 
 import Card from "./Cards/Card.vue";
-import StatsCard from "./Cards/StatsCard.vue";
 
 import SidebarPlugin from "./SidebarPlugin/index";
 
@@ -27,7 +26,6 @@ export {
   Card,
   Modal,
   CloseButton,
-  StatsCard,
   LanguageStatistic,
   SubmitList,
   ContributeBoard,
