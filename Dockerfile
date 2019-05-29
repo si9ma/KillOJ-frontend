@@ -7,7 +7,7 @@ RUN apk add \
             bash \
             git
 
-LABEL UpdateAt="2019-05-29 18:00"
+LABEL UpdateAt="2019-05-29 19:11"
 
 RUN git clone https://github.com/si9ma/KillOJ-frontend.git /app
 
