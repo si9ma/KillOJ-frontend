@@ -6,13 +6,6 @@ export default {
     let global = new Vue({
       data() {
         return {
-          apiURL() {
-            if (_.includes('$BACKEND_URL','BACKEND_URL')) { // env variable not be replaced
-              return  'http://127.0.0.1/api'
-            }else {
-              return '$BACKEND_URL'
-            }
-          },
           mdtoolbars: {
             bold: true,
             italic: true,
@@ -29,6 +22,15 @@ export default {
             subfield: true,
           }
         }
+      },
+      computed: {
+        apiURL() {
+          if (_.includes('$BACKEND_URL','BACKEND_URL')) { // env variable not be replaced
+            return  'http://127.0.0.1/api'
+          }else {
+            return '$BACKEND_URL'
+          }
+        },
       },
       methods: {
         // alert at top right
