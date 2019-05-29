@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ "$1" != "frontend" ] && $@ && return
+[ "$1" != "frontend" ] && $@ && exit 0
 
 # if not empty
 # replace backend url
