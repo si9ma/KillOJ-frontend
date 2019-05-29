@@ -1,10 +1,18 @@
+import _ from 'lodash'
+
 // global variable
 export default {
   install(Vue) {
     let global = new Vue({
       data() {
         return {
-          apiURL: 'http://127.0.0.1/api',
+          apiURL() {
+            if (_.includes('$BACKEND_URL','BACKEND_URL')) { // env variable not be replaced
+              return  'http://127.0.0.1/api'
+            }else {
+              return '$BACKEND_URL'
+            }
+          },
           mdtoolbars: {
             bold: true,
             italic: true,
