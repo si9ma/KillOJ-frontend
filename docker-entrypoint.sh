@@ -15,4 +15,4 @@ if [ "$BACKEND_URL" != "" ];then
 fi
 
 # start server
-nginx -g daemon off
+nginx -g "daemon off;"
