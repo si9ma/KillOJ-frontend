@@ -716,6 +716,7 @@
           {name: 'Monokai', value: 'monokai'},
           {name: 'Material', value: 'material'},
           {name: 'Solarized Dark', value: 'solarized dark'},
+          {name: 'Solarized Light', value: 'solarized light'},
         ],
         previousLanguage: {key: 3, name: 'Go', value: 'text/x-go'}, // init value should same as language
         language: {key: 3, name: 'Go', value: 'text/x-go'},
