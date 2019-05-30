@@ -181,6 +181,7 @@
 </template>
 
 <script>
+  import join from 'lodash/join'
   import UserCard from './Profile/UserCard'
   import {AuthHeader} from '../service/auth'
   import {AfterDays, ExtractJson} from '../service/util'
@@ -480,7 +481,7 @@
       },
       invite2Contest() {
         this.$axios({
-          url: _.join([this.$gbl.apiURL, 'contests/contest', this.activeContest.id, 'invite'], '/'),
+          url: join([this.$gbl.apiURL, 'contests/contest', this.activeContest.id, 'invite'], '/'),
           method: 'post',
           headers: AuthHeader(),
           data: {
@@ -491,7 +492,7 @@
         })
           .then((response) => {
             console.log('invite contest successful!')
-            this.inviteURL = _.join([window.location.origin, 'contests/join', response.data.id], '/')
+            this.inviteURL = join([window.location.origin, 'contests/join', response.data.id], '/')
             this.$gbl.alert('success', '邀请成功')
           })
           .catch((error) => {
@@ -511,13 +512,13 @@
       getInviteInfo() {
         this.doing = true
         this.$axios({
-          url: _.join([this.$gbl.apiURL, '/contests/contest', this.activeContest.id, 'invite'], '/'),
+          url: join([this.$gbl.apiURL, '/contests/contest', this.activeContest.id, 'invite'], '/'),
           method: 'get',
           headers: AuthHeader(),
         })
           .then((response) => {
             console.log('get invite info successful!')
-            this.inviteURL = _.join([window.location.origin, 'contests/join', response.data.id], '/')
+            this.inviteURL = join([window.location.origin, 'contests/join', response.data.id], '/')
             this.doing = false
           })
           .catch((error) => {

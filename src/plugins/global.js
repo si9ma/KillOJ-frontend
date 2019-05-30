@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import includes from 'lodash/includes'
 
 // global variable
 export default {
@@ -25,7 +25,7 @@ export default {
       },
       computed: {
         apiURL() {
-          if (_.includes('$BACKEND_URL','BACKEND_URL')) { // env variable not be replaced
+          if (includes('$BACKEND_URL','BACKEND_URL')) { // env variable not be replaced
             return  'http://127.0.0.1/api'
           }else {
             return '$BACKEND_URL'

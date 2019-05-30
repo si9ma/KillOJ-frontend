@@ -577,7 +577,8 @@
   import UserCard from './Profile/UserCard'
   import {SplitPanel} from "@/components";
   import {Comment} from "@/components";
-  import _ from "lodash";
+  import join from "lodash/join";
+  import remove from "lodash/remove";
   import SubmitStatistic from "../components/SubmitStatistic";
 
   export default {
@@ -959,7 +960,7 @@
         return new Promise((resolve,reject) => {
           this.$axios({
             method: 'get',
-            url: _.join([this.$gbl.apiURL, 'problems/problem', this.problemID, 'lastsubmit'], '/'),
+            url: join([this.$gbl.apiURL, 'problems/problem', this.problemID, 'lastsubmit'], '/'),
             headers: AuthHeader(),
             params: {
               success: success,
@@ -1075,12 +1076,12 @@
       },
       filterProblem() {
         // filter unavailable samples => delete_it is true, but id is empty
-        _.remove(this.problem.samples, el => {
+        remove(this.problem.samples, el => {
           return el.delete_it && !el.id
         })
 
         // filter unavailable test cases => delete_it is true, but id is empty
-        _.remove(this.problem.test_cases, el => {
+        remove(this.problem.test_cases, el => {
           return el.delete_it && !el.id
         })
 
@@ -1259,7 +1260,7 @@
 
         this.attitude = 1
         this.vote().then(() => {
-          _.remove(this.problem.down_vote_users, el => {
+          remove(this.problem.down_vote_users, el => {
             return el.id === this.mySelf.id
           })
           this.problem.up_vote_users.push({id: this.mySelf.id})
@@ -1297,7 +1298,7 @@
 
         this.attitude = -1
         this.vote().then(() => {
-          _.remove(this.problem.up_vote_users, el => {
+          remove(this.problem.up_vote_users, el => {
             return el.id === this.mySelf.id
           })
           this.problem.down_vote_users.push({id: this.mySelf.id})
@@ -1308,7 +1309,7 @@
       vote() {
         return new Promise((resolve, reject) => {
           this.$axios({
-            url: _.join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'vote'], '/'),
+            url: join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'vote'], '/'),
             method: 'post',
             headers: AuthHeader(),
             data: {
@@ -1370,7 +1371,7 @@
         }
 
         this.$axios({
-          url: _.join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'submit'], '/'),
+          url: join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'submit'], '/'),
           method: 'post',
           headers: AuthHeader(),
           data: {
@@ -1400,7 +1401,7 @@
           pulling = true
 
           this.$axios({
-            url: _.join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'result'], '/'),
+            url: join([this.$gbl.apiURL, 'problems/problem', this.problem.id, 'result'], '/'),
             method: 'get',
             headers: AuthHeader()
           }).then(response => {
@@ -1445,7 +1446,7 @@
       },
       submitComment(val) {
         this.$axios({
-          url: _.join([this.$gbl.apiURL,'problems/problem',this.problemID,'comment'],'/'),
+          url: join([this.$gbl.apiURL,'problems/problem',this.problemID,'comment'],'/'),
           method: 'post',
           headers: AuthHeader(),
           data: {

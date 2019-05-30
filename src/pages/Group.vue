@@ -157,6 +157,7 @@
   import {ExtractJson} from '../service/util'
   import {Contains} from '../service/util'
   import {GetAllGroups} from "../service";
+  import join from 'lodash/join'
 
   // for sort by id
   function groupCompareByID(order) {
@@ -417,7 +418,7 @@
       },
       invite2Group() {
         this.$axios({
-          url: _.join([this.$gbl.apiURL, '/groups/group', this.activeGroup.id, 'invite'], '/'),
+          url: join([this.$gbl.apiURL, '/groups/group', this.activeGroup.id, 'invite'], '/'),
           method: 'post',
           headers: AuthHeader(),
           data: {
@@ -427,7 +428,7 @@
         })
           .then((response) => {
             console.log('invite group successful!')
-            this.inviteURL = _.join([window.location.origin, 'groups/join', response.data.id], '/')
+            this.inviteURL = join([window.location.origin, 'groups/join', response.data.id], '/')
             this.$gbl.alert('success', '邀请成功')
           })
           .catch((error) => {
@@ -447,13 +448,13 @@
       getInviteInfo() {
         this.doing = true
         this.$axios({
-          url: _.join([this.$gbl.apiURL, 'groups/group', this.activeGroup.id, 'invite'], '/'),
+          url: join([this.$gbl.apiURL, 'groups/group', this.activeGroup.id, 'invite'], '/'),
           method: 'get',
           headers: AuthHeader(),
         })
           .then((response) => {
             console.log('get invite info successful!')
-            this.inviteURL = _.join([window.location.origin, 'groups/join', response.data.id], '/')
+            this.inviteURL = join([window.location.origin, 'groups/join', response.data.id], '/')
             this.doing = false
           })
           .catch((error) => {

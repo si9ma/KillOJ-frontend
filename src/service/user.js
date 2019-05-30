@@ -1,5 +1,5 @@
 import axios from 'axios'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import {AuthHeader} from './auth'
 import store from '../store'
 import Vue from 'vue'
@@ -9,7 +9,7 @@ export function GetUserInfo() {
     // if user info exist, return directly
     let user = store.state.userInfo
 
-    if (!_.isEmpty(user)) {
+    if (!isEmpty(user)) {
       resolve(user)
     }
 

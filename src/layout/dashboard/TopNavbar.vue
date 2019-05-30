@@ -114,8 +114,8 @@
 </template>
 <script>
   import {CollapseTransition} from 'vue2-transitions';
-  import _ from 'lodash'
   import {AuthHeader} from '@/service/auth'
+  import isEmpty from 'lodash/isEmpty'
 
   export default {
     components: {
@@ -131,7 +131,7 @@
       },
       user() {
         let user = this.$store.state.userInfo
-        if (!_.isEmpty(user)) {
+        if (!isEmpty(user)) {
           return user
         }
 

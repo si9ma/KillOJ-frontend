@@ -113,7 +113,8 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import join from 'lodash/join'
+  import replace from 'lodash/replace'
   import {GetUserInfo} from '../service/user'
   import {Contains, ExtractJson} from '../service/util'
 
@@ -235,7 +236,7 @@
         }
       },
       getAuthLink(provider) {
-        return _.join([this.$gbl.apiURL, 'auth3rd', provider], '/')
+        return join([this.$gbl.apiURL, 'auth3rd', provider], '/')
       },
       login() {
         this.$axios({
@@ -275,7 +276,7 @@
         let baseURL = window.location.origin
         let fullURL = window.location.href
         this.$axios({
-          url: _.replace(fullURL, baseURL, this.$gbl.apiURL),
+          url: replace(fullURL, baseURL, this.$gbl.apiURL),
           method: 'get'
         })
           .then((response) => {

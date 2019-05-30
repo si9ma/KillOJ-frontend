@@ -1,8 +1,5 @@
 import VueRouter from 'vue-router'
 import routes from './routes'
-import store from '../store'
-import _ from 'lodash'
-import { GetUserInfo } from '@/service/user'
 
 // configure router
 const router = new VueRouter({
@@ -17,17 +14,5 @@ const router = new VueRouter({
     }
   }
 })
-
-// router.beforeEach((to, from, next) => {
-//   var isAuth3rd = _.includes(to.path, '/auth3rd/')
-//   var jwt = localStorage.getItem('jwt')
-//
-//   // skip auth3rd
-//   if (_.isEmpty(store.state.userInfo) && !_.isEmpty(jwt) && !isAuth3rd) {
-//     // if user info is empty and jwt exist, get user info
-//     GetUserInfo()
-//   }
-//   next()
-// })
 
 export default router

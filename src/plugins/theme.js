@@ -1,5 +1,5 @@
 import store from '../store'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import {AuthHeader, ExtractJson} from "../service";
 
 export default {
@@ -65,7 +65,7 @@ export default {
           this.submit()
         },
         submit() {
-          if (_.isEmpty(store.state.userInfo)) {
+          if (isEmpty(store.state.userInfo)) {
             return // if user no login, don't submit
           }
 

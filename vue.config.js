@@ -1,9 +1,7 @@
 const webpack = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-  configureWebpack: {
-    devtool: 'source-map'
-  },
   transpileDependencies: [
     'vue-echarts',
     'resize-detector'
@@ -19,7 +17,8 @@ module.exports = {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 6
-      })
+      }),
+      new BundleAnalyzerPlugin()
     ]
   },
   pwa: {

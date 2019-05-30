@@ -41,6 +41,7 @@
   </card>
 </template>
 <script>
+  import join from 'lodash/join'
 export default {
   props: {
     user: {
@@ -59,9 +60,9 @@ export default {
   computed: {
     socials () {
       return [
-        { provider: 'github', icon: ['fab', 'github'], link: _.join(['https://github.com', this.user.github_name], '/'), show: this.user.github_name },
-        { provider: 'zhihu', icon: ['fab', 'zhihu'], link: _.join(['https://www.zhihu.com/people', this.user.zhihu_name], '/'), show: this.user.zhihu_name },
-        { provider: 'weibo', icon: ['fab', 'weibo'], link: _.join(['https://weibo.com', this.user.weibo_name], '/'), show: this.user.weibo_name },
+        { provider: 'github', icon: ['fab', 'github'], link: join(['https://github.com', this.user.github_name], '/'), show: this.user.github_name },
+        { provider: 'zhihu', icon: ['fab', 'zhihu'], link: join(['https://www.zhihu.com/people', this.user.zhihu_name], '/'), show: this.user.zhihu_name },
+        { provider: 'weibo', icon: ['fab', 'weibo'], link: join(['https://weibo.com', this.user.weibo_name], '/'), show: this.user.weibo_name },
         { provider: 'email', icon: ['fas', 'envelope'], link: "mailto:" + this.user.email,show: this.user.email },
         { provider: 'site', icon: ['fab', 'superpowers'], link: this.user.site,show: this.user.site },
       ]

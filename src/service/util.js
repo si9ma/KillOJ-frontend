@@ -1,11 +1,12 @@
-import _ from 'lodash'
+import split from 'lodash/split'
+import includes from 'lodash/includes'
 
 // check if str1 contains any character of str2
 export function Contains(str1, str2) {
   let success = {}
   try {
-    _.split(str1, '').forEach(function (el) {
-      if (_.includes(str2, el)) throw success
+    split(str1, '').forEach(function (el) {
+      if (includes(str2, el)) throw success
     })
   } catch (e) {
     if (e === success) return true

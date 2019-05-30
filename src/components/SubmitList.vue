@@ -173,7 +173,7 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import replace from 'lodash/replace'
 
   // for sort by id
   import UserCard from "../pages/Profile/UserCard";
@@ -363,8 +363,8 @@
         this.filterSubmits()
       },
       formatDate(date) {
-        let res = _.replace(date,'T',' ')
-        res = _.replace(res,'Z','')
+        let res = replace(date,'T',' ')
+        res = replace(res,'Z','')
 
         return res
       },

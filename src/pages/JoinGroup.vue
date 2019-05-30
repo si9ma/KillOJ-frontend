@@ -50,7 +50,7 @@
 <script>
   import {AuthHeader, ExtractJson} from "../service";
   import UserCard from './Profile/UserCard'
-  import _ from "lodash";
+  import join from "lodash/join";
 
   export default {
     name: "JoinGroup",
@@ -80,7 +80,7 @@
     created() {
       this.doing = true
       this.$axios({
-        url: _.join([this.$gbl.apiURL, 'groups/join', this.$router.currentRoute.params.uuid], '/'),
+        url: join([this.$gbl.apiURL, 'groups/join', this.$router.currentRoute.params.uuid], '/'),
         method: 'get',
         headers: AuthHeader()
       }).then(response => {
@@ -112,7 +112,7 @@
       join2Group() {
         this.doing = true
         this.$axios({
-          url: _.join([this.$gbl.apiURL, 'groups/join', this.$router.currentRoute.params.uuid], '/'),
+          url: join([this.$gbl.apiURL, 'groups/join', this.$router.currentRoute.params.uuid], '/'),
           method: 'post',
           headers: AuthHeader(),
           data: {

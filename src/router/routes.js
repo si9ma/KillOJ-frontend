@@ -19,7 +19,6 @@ const JoinGroup = () => import(/* webpackChunkName: "common" */ '@/pages/JoinGro
 const JoinContest = () => import(/* webpackChunkName: "common" */ '@/pages/JoinContest.vue')
 const Submits = () => import(/* webpackChunkName: "common" */ '@/pages/Submits.vue')
 
-import _ from 'lodash'
 import Vue from 'vue'
 import {GetUserInfo} from '../service/user'
 
