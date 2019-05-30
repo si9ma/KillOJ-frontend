@@ -6,6 +6,7 @@ RUN apk add \
             bash \
             git
 
+LABEL UpdatedAt="2019-05-30 20:26"
 RUN git clone https://github.com/si9ma/KillOJ-frontend.git /app
 WORKDIR /app
 RUN yarn install
@@ -17,6 +18,7 @@ RUN apk add bash
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 ADD docker-entrypoint.sh /
 ADD default.conf /etc/nginx/conf.d
+ADD nginx.conf /etc/nginx
 
 EXPOSE 80
 ENTRYPOINT [ "/docker-entrypoint.sh"]
