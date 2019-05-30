@@ -1477,6 +1477,10 @@
 </style>
 
 <style lang="scss">
+  .CodeMirror pre {
+    color: inherit !important;
+  }
+
   #problem-statistic {
     .echarts {
       width: 100%;

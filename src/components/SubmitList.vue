@@ -437,6 +437,10 @@
 </script>
 
 <style lang="scss">
+  .CodeMirror pre {
+    color: inherit !important;
+  }
+
   .el-tag {
     border: none !important;
   }
