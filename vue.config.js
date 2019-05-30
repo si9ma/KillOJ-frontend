@@ -8,6 +8,13 @@ module.exports = {
   ],
   lintOnSave: false,
   configureWebpack: {
+    externals: {
+      'vue': 'Vue',
+      'vue-router': 'VueRouter',
+      'vuex': 'Vuex',
+      'element-ui':'ELEMENT',
+      'axios':'axios',
+    },
     // Set up all the aliases we use in our app.
     resolve: {
       alias: {
