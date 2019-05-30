@@ -6,7 +6,7 @@ RUN apk add \
             bash \
             git
 
-LABEL UpdatedAt="2019-05-30 20:56"
+LABEL UpdatedAt="2019-05-30 21:02"
 RUN git clone https://github.com/si9ma/KillOJ-frontend.git /app
 WORKDIR /app
 RUN yarn install
