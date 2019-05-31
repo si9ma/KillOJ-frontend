@@ -59,7 +59,7 @@
               </el-form-item>
             </div>
           </div>
-          <div class="row">
+          <div v-if="!isLogin" class="row">
             <div class="col-md-11 ml-auto mr-auto">
               <el-form-item prop="confirmPassword">
                 <el-input v-model="authForm.confirmPassword"
@@ -128,6 +128,10 @@
     },
     data() {
       let validatePass = (rule, value, callback) => {
+        if (this.isLogin) {
+          callback() // skip when login
+        }
+
         if (value === '') {
           callback(new Error('再次输入密码'))
         } else if (value !== this.authForm.password) {
