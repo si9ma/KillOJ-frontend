@@ -154,7 +154,7 @@
         })
       })
 
-      GetAllSubmit('',1,false).then(submits => {
+      GetAllSubmit('me',1,false).then(submits => {
         this.contributeSubmits = submits
       })
 
