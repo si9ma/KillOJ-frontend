@@ -12,6 +12,14 @@ if [ "$BACKEND_URL" != "" ];then
     do
       sed -i 's/$BACKEND_URL/'$escapedURL'/g' $item
     done
+
+    # replace in gz
+    for item in `find . -name "*.gz" -type f`
+    do
+      cp "$item" "$item~" &&
+      gzip -cd "$item~" | sed 's/$BACKEND_URL/'$escapedURL'/g' | gzip > "$item" &&
+      rm "$item~"
+    done
 fi
 
 # start server
