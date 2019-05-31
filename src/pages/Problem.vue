@@ -1434,7 +1434,8 @@
       },
       loadSubmit(submit) {
         if (submit.language !== this.language.key) {
-          this.cmOptions.mode = this.languages[submit.language].value
+          this.language = this.languages[submit.language]
+          this.cmOptions.mode = this.language.value
           this.codeMap.set(this.previousLanguage.key, this.code)
           this.previousLanguage = this.languages[submit.language]
 

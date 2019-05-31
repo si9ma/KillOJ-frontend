@@ -100,7 +100,7 @@
                            filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag style="cursor: pointer" @click="filterChange({tags:[tag.id]})"
-                      size="small" class="mr-1" v-for="(tag,index) in scope.row.tags"
+                      size="small" class="mr-1 mt-1" v-for="(tag,index) in scope.row.tags"
                       :key="index">
                 {{tag.name}}
               </el-tag>
