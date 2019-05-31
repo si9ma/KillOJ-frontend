@@ -6,7 +6,7 @@ RUN apk add \
             bash \
             git
 
-LABEL UpdatedAt="2019-05-31 09:08"
+LABEL BuildAt="2019-05-31 18:18"
 RUN git clone https://github.com/si9ma/KillOJ-frontend.git /app
 WORKDIR /app
 RUN yarn config set registry https://registry.npm.taobao.org
