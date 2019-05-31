@@ -1446,6 +1446,7 @@
         this.code = submit.source_code
       },
       submitComment(val) {
+        console.log(val)
         this.$axios({
           url: join([this.$gbl.apiURL,'problems/problem',this.problemID,'comment'],'/'),
           method: 'post',

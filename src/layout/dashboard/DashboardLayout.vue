@@ -7,8 +7,8 @@
         <sidebar-link to="/groups" name="分组" :fwicon="['fas','users']"/>
         <sidebar-link to="/contests" name="比赛" :fwicon="['fas','trophy']"/>
         <sidebar-link to="/submits" name="提交" :fwicon="['fab','lastfm']"/>
-        <sidebar-link v-if="mySelf && mySelf.role === 0" to="/catalogs" name="分类" :fwicon="['fas','paw']"/>
-        <sidebar-link v-if="mySelf && mySelf.role === 0 || mySelf.role === 1" to="/users" name="用户" :fwicon="['fas','user']"/>
+        <sidebar-link v-if="mySelf && mySelf.role === 0 || mySelf.role === 1" to="/catalogs" name="分类" :fwicon="['fas','paw']"/>
+        <sidebar-link v-if="mySelf && mySelf.role === 0" to="/users" name="用户" :fwicon="['fas','user']"/>
       </template>
     </side-bar>
     <div class="main-panel">

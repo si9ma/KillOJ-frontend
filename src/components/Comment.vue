@@ -53,7 +53,7 @@
             <span class="from-name">{{reply.from.name}}</span><span>: </span>
             <span class="to-name">@{{reply.to.name}}</span>
             <div class="comment-preview">
-              <mavon-editor :value="item.content"
+              <mavon-editor :value="reply.content"
                             defaultOpen="preview"
                             :toolbarsFlag=false
                             :subfield=false
@@ -75,8 +75,8 @@
         </div>
         <transition name="fade">
           <div class="input-wrapper" v-if="showCommentID === item.id">
-            <mavon-editor :value="content"
-                          v-model="content"
+            <mavon-editor :value="replyContent"
+                          v-model="replyContent"
                           @change="showCommentBtn = true"
                           defaultOpen="preview"
                           placeholder="写下你的评论"
@@ -86,7 +86,7 @@
             <div class="btn-control">
               <el-button type="info" size="mini" @click="cancel">取消</el-button>
               <el-button type="primary" size="mini"
-                         v-on:click="$emit('submit',{from_id:meID,to_id: showCommentUserID,for_comment: showCommentID,content: content});showCommentID = 0">发送</el-button>
+                         v-on:click="$emit('submit',{from_id:meID,to_id: showCommentUserID,for_comment: showCommentID,content: filterReply()});showCommentID = 0;atUser = ''">发送</el-button>
             </div>
           </div>
         </transition>
@@ -97,6 +97,8 @@
 
 <script>
   import UserCard from "../pages/Profile/UserCard";
+  import replace from 'lodash/replace'
+
   export default {
     name: 'comment',
     props: {
@@ -113,6 +115,8 @@
     data() {
       return {
         content: '',
+        replyContent: '',
+        atUser: '',
         showCommentBtn: false,
         showCommentID: 0,
         showCommentUserID: 0,
@@ -124,12 +128,18 @@
         this.showCommentID = 0
       },
 
+      // remove @
+      filterReply() {
+        return replace(this.replyContent,this.atUser,'')
+      },
+
       showCommentInput(item, reply) {
         if (reply) {
-          this.content = "@" + reply.from.name + " "
+          this.atUser = "@" + reply.from.name
+          this.replyContent = this.atUser + " "
           this.showCommentUserID = reply.from.id
         } else {
-          this.content = ''
+          this.replyContent = ''
           this.showCommentUserID = item.from.id
         }
         this.showCommentID = item.id
