@@ -18,7 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "echarts": "^4.2.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "mavon-editor": "^2.7.4",
     "vue-calendar-heatmap": "^0.8.4",
     "vue-chartjs": "^3.4.0",
